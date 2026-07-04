@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chess760 — Шахматы 760</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#e8f5e9; --surface:#ffffff; --surface2:#f1f8f2;
+      --gold:#7b5e2a; --gold-light:#5a4010; --gold-dim:#a08040;
+      --text:#1a2e1a; --text-dim:#4a6e4a; --border:#b2d8b2;
+      --green:#2e7d32;
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--bg);color:var(--text);font-family:'EB Garamond',Georgia,serif;font-size:17px;line-height:1.7;min-height:100vh;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 60% 40% at 15% 60%,rgba(46,125,50,0.06) 0%,transparent 70%),radial-gradient(ellipse 50% 50% at 85% 20%,rgba(200,230,200,0.3) 0%,transparent 60%);pointer-events:none;}
+    .page-wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 28px 80px;}
+ 
+    /* Шапка */
+    header{text-align:center;padding:56px 0 40px;border-bottom:1px solid var(--border);margin-bottom:48px;position:relative;}
+    .crown{font-size:52px;line-height:1;margin-bottom:16px;filter:drop-shadow(0 0 20px rgba(46,125,50,0.5));animation:float 4s ease-in-out infinite;}
+    @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+    header h1{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,50px);font-weight:900;color:var(--gold-light);letter-spacing:0.03em;line-height:1.1;margin-bottom:10px;}
+    header p{color:var(--text-dim);font-style:italic;font-size:17px;max-width:600px;margin:0 auto;}
+    header::after{content:'✦ ✦ ✦';display:block;margin-top:20px;color:var(--gold-dim);font-size:12px;letter-spacing:10px;}
+ 
+    /* Языковые кнопки */
+    .lang-bar{display:flex;justify-content:flex-end;gap:6px;padding:12px 0 0;}
+    .lang-btn{background:var(--surface);border:1px solid var(--border);color:var(--text-dim);font-family:'Playfair Display',serif;font-size:13px;padding:5px 14px;cursor:pointer;transition:all 0.2s;letter-spacing:0.05em;}
+    .lang-btn:hover{border-color:var(--gold-dim);color:var(--gold);}
+    .lang-btn.active{background:var(--surface2);border-color:var(--green);color:var(--green);}
+ 
+    /* Описание */
+    .intro{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--green);padding:26px 30px;margin-bottom:40px;}
+    .intro p{color:var(--text);margin-bottom:10px;font-size:17px;}
+    .intro p:last-child{margin-bottom:0;}
+    .intro strong{color:#1a3d1a;}
+ 
+    /* Карточки уровней */
+    .levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:44px;}
+    .level-card{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--green);padding:18px 14px;text-align:center;text-decoration:none;color:var(--text);transition:all 0.22s ease;display:block;}
+    .level-card:hover{border-top-color:#1a5e1e;box-shadow:0 6px 24px rgba(46,125,50,0.15);transform:translateY(-3px);}
+    .level-card .lc-size{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#1a3d1a;display:block;margin-bottom:4px;}
+    .level-card .lc-name{font-size:14px;color:var(--text-dim);font-style:italic;display:block;}
+    .level-card .lc-play{display:inline-block;margin-top:10px;font-size:13px;color:var(--green);font-family:'Playfair Display',serif;font-weight:700;letter-spacing:0.05em;background:rgba(46,125,50,0.08);border:1px solid rgba(46,125,50,0.3);padding:3px 12px;}
+ 
+    /* Разделы ссылок */
+    .links-section{margin-bottom:36px;}
+    .links-section h2{font-family:'Playfair Display',serif;font-size:20px;color:#1a3d1a;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--border);}
+    .link-list{list-style:none;}
+    .link-list li{padding:9px 0;border-bottom:1px solid rgba(178,216,178,0.6);}
+    .link-list li:last-child{border-bottom:none;}
+    .link-list a{color:var(--green);text-decoration:none;font-size:16px;transition:color 0.2s;}
+    .link-list a:hover{color:#1a3d1a;text-decoration:underline;}
+    .li-icon{margin-right:8px;}
+ 
+    /* Счётчик */
+    .counter-box{background:var(--surface);border:1px solid var(--border);padding:10px 16px;text-align:center;margin-bottom:36px;display:inline-block;width:auto;margin-left:auto;margin-right:auto;}
+    .counter-box h3{font-family:'Playfair Display',serif;font-size:14px;color:#1a3d1a;margin-bottom:8px;}
+    .counter-wrap{text-align:center;margin-bottom:36px;}
+ 
+    /* Версия */
+    .version-tag{text-align:center;color:var(--gold-dim);font-size:13px;font-style:italic;margin-bottom:14px;}
+ 
+    /* Подвал */
+    footer{text-align:center;padding:28px 0;border-top:1px solid var(--border);color:var(--text-dim);font-style:italic;font-size:15px;}
+    footer a{color:var(--green);text-decoration:none;}
+    footer a:hover{text-decoration:underline;}
+ 
+    @media(max-width:560px){
+      .levels{grid-template-columns:repeat(2,1fr);}
+      .intro{padding:18px 16px;}
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+ 
+  <!-- Языки -->
+  <div class="lang-bar">
+    <button class="lang-btn active" onclick="setLang('ru',this)">🇷🇺 Русский</button>
+    <button class="lang-btn" onclick="setLang('en',this)">🇬🇧 English</button>
+  </div>
+ 
+  <!-- Шапка -->
+  <header>
+    <div class="crown">♚</div>
+    <h1 data-ru="Шахматы 760" data-en="Chess 760">Шахматы 760</h1>
+    <p data-ru="Многоуровневые шахматы: 8×8 · 10×10 · 12×12 · 14×14 · 16×16 · Свидетельство на полезную модель, Российская Федерация"
+       data-en="Multi-level chess: 8×8 · 10×10 · 12×12 · 14×14 · 16×16 · Utility model certificate, Russian Federation">
+       Многоуровневые шахматы: 8×8 · 10×10 · 12×12 · 14×14 · 16×16 · Свидетельство на полезную модель, Российская Федерация</p>
+  </header>
+ 
+  <!-- Описание -->
+  <div class="intro">
+    <p data-ru="Добро пожаловать на сайт, посвящённый изобретению — <strong>большим (многоуровневым) шахматам</strong>."
+       data-en="Welcome to the site dedicated to the invention — <strong>Grand (multi-level) Chess</strong>.">
+       Добро пожаловать на сайт, посвящённый изобретению — <strong>большим (многоуровневым) шахматам</strong>.</p>
+    <p data-ru="Большие шахматы — ответ на вопросы: можно ли увеличить шахматное поле? Если да, то на сколько клеток? Какие фигуры станут логичным продолжением классических шахмат?"
+       data-en="Grand Chess answers the questions: can the chessboard be enlarged? If yes, by how many squares? Which pieces are the logical continuation of classical chess?">
+       Большие шахматы — ответ на вопросы: можно ли увеличить шахматное поле? Если да, то на сколько клеток? Какие фигуры станут логичным продолжением классических шахмат?</p>
+    <p data-ru="Представлено <strong>5 уровней</strong>: от классических 8×8 до Морских шахмат 16×16. Доска 16×16 — это четыре классических шахматных поля. Это единственная страница в сети, посвящённая сразу пяти уровням шахмат."
+       data-en="We present <strong>5 levels</strong>: from classic 8×8 to Sea Chess 16×16. The 16×16 board equals four classical boards. This is the only page on the web dedicated to five chess levels at once.">
+       Представлено <strong>5 уровней</strong>: от классических 8×8 до Морских шахмат 16×16. Доска 16×16 — это четыре классических шахматных поля. Это единственная страница в сети, посвящённая сразу пяти уровням шахмат.</p>
+  </div>
+ 
+  <!-- Карточки уровней -->
+  <div class="levels">
+    <a class="level-card" href="chess.html#b8">
+      <span class="lc-size">8 × 8</span>
+      <span class="lc-name" data-ru="Классические шахматы" data-en="Classic Chess">Классические шахматы</span>
+      <span class="lc-play" data-ru="▶ Играть" data-en="▶ Play">▶ Играть</span>
+    </a>
+    <a class="level-card" href="chess.html#b10">
+      <span class="lc-size">10 × 10</span>
+      <span class="lc-name" data-ru="Русские шахматы" data-en="Russian Chess">Русские шахматы</span>
+      <span class="lc-play" data-ru="▶ Играть" data-en="▶ Play">▶ Играть</span>
+    </a>
+    <a class="level-card" href="chess.html#b12">
+      <span class="lc-size">12 × 12</span>
+      <span class="lc-name" data-ru="Большие шахматы" data-en="Grand Chess">Большие шахматы</span>
+      <span class="lc-play" data-ru="▶ Играть" data-en="▶ Play">▶ Играть</span>
+    </a>
+    <a class="level-card" href="chess.html#b14">
+      <span class="lc-size">14 × 14</span>
+      <span class="lc-name" data-ru="Царские шахматы" data-en="Royal Chess">Царские шахматы</span>
+      <span class="lc-play" data-ru="▶ Играть" data-en="▶ Play">▶ Играть</span>
+    </a>
+    <a class="level-card" href="chess.html#b16">
+      <span class="lc-size">16 × 16</span>
+      <span class="lc-name" data-ru="Морские шахматы" data-en="Sea Chess">Морские шахматы</span>
+      <span class="lc-play" data-ru="▶ Играть" data-en="▶ Play">▶ Играть</span>
+    </a>
+    <a class="level-card" href="chess10_online.html" style="border-top-color:#1565c0;">
+      <span class="lc-size" style="color:#1565c0;font-size:28px;">🌐</span>
+      <span class="lc-name" data-ru="Русские 10×10 Онлайн" data-en="Russian 10×10 Online">Русские 10×10 Онлайн</span>
+      <span class="lc-play" style="color:#1565c0;border-color:rgba(21,101,192,0.4);background:rgba(21,101,192,0.08);" data-ru="▶ Играть онлайн" data-en="▶ Play Online">▶ Играть онлайн</span>
+    </a>
+  </div>
+ 
+  <!-- Ссылки: о проекте -->
+  <div class="links-section">
+    <h2 data-ru="О проекте" data-en="About the Project">О проекте</h2>
+    <ul class="link-list">
+      <li><span class="li-icon">📜</span><a href="history.html" data-ru="История изобретения" data-en="History of the Invention">История изобретения</a></li>
+      <li><span class="li-icon">🏛</span><a href="registr.html" data-ru="Свидетельство о регистрации" data-en="Certificate of Registration">Свидетельство о регистрации</a></li>
+      <li><span class="li-icon">💬</span><a href="http://www.narod.ru/guestbook/?owner=71465540" target="_blank" data-ru="Гостевая книга" data-en="Guest Book">Гостевая книга</a></li>
+      <li><span class="li-icon">🌐</span><a href="https://vab456123-prog.github.io/Chess760/" target="_blank" data-ru="Новый сайт Chess760 на GitHub" data-en="New Chess760 site on GitHub">Новый сайт Chess760 на GitHub</a></li>
+      <li><span class="li-icon">✉️</span><a href="mailto:vab_07@mail.ru">vab_07@mail.ru</a></li>
+    </ul>
+  </div>
+ 
+  <!-- Ссылки: дополнительно -->
+  <div class="links-section">
+    <h2 data-ru="Дополнительно" data-en="More">Дополнительно</h2>
+    <ul class="link-list">
+      <li><span class="li-icon">📚</span><a href="100_knig_spiski_27.html" data-ru="Списки 100 лучших книг для чтения" data-en="100 Best Books Lists">Списки 100 лучших книг для чтения</a></li>
+      <li><span class="li-icon">⭐</span><a href="100_knig_spiski_abc.html" data-ru="«Золотой стандарт для чтения»" data-en="«Golden Standard for Reading»">«Золотой стандарт для чтения»</a></li>
+      <li><span class="li-icon">🎖</span><a href="history1.html" data-ru="Российскому солдату — да!" data-en="To the Russian Soldier — Yes!">Российскому солдату — да!</a></li>
+    </ul>
+  </div>
+ 
+  <!-- Счётчик Mail.ru -->
+  <div class="counter-wrap">
+  <div class="counter-box">
+    <h3 data-ru="Счётчик посещений" data-en="Visit Counter">Счётчик посещений</h3>
+    <a href="https://top.mail.ru/jump?from=1910840" target="_blank">
+      <img src="https://counter.mail.ru/counter/reach/id=1910840;t=130;l=1/"
+           border="0" alt="Рейтинг@Mail.ru" title="Счётчик Mail.ru">
+    </a>
+    <noscript>
+      <img src="https://counter.mail.ru/counter/reach/id=1910840;t=130;l=1/"
+           border="0" alt="Рейтинг@Mail.ru">
+    </noscript>
+  </div>
+  </div>
+ 
+  <div class="version-tag" data-ru="Версия: июнь 2026" data-en="Version: June 2026">Версия: июнь 2026</div>
+ 
+  <footer>
+    <a href="chess.html" data-ru="♟ Играть в шахматы" data-en="♟ Play Chess">♟ Играть в шахматы</a>
+    &nbsp;·&nbsp;
+    <a href="https://vab456123-prog.github.io/Chess760/" target="_blank">Chess760 на GitHub</a>
+    &nbsp;·&nbsp;
+    <a href="https://megachess.narod.ru" target="_blank">megachess.narod.ru</a>
+    &nbsp;·&nbsp;
+    <span data-ru="Изобретение, Свидетельство РФ" data-en="Invention, RF Certificate">Изобретение, Свидетельство РФ</span>
+  </footer>
+ 
+</div>
+ 
+<script>
+let LANG = 'ru';
+function setLang(lang, btn) {
+  LANG = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('[data-ru]').forEach(el => {
+    const val = el.dataset[lang];
+    if (val) {
+      // Если содержит HTML теги — используем innerHTML
+      if (val.includes('<')) el.innerHTML = val;
+      else el.textContent = val;
+    }
+  });
+}
+</script>
+</body>
+</html>

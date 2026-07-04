@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/Vadim1558/Downloads/chess10_online.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Русские шахматы 10×10 — Онлайн</title>
+  <link href="./Русские шахматы 10×10 — Онлайн_files/css2" rel="stylesheet">
+  <!-- Firebase CDN (без модулей) -->
+  <script src="./Русские шахматы 10×10 — Онлайн_files/firebase-app-compat.js.Без названия"></script>
+  <script src="./Русские шахматы 10×10 — Онлайн_files/firebase-database-compat.js.Без названия"></script>
+  <style>
+    :root {
+      --bg:#e8f5e9; --surface:#ffffff; --surface2:#f1f8f2;
+      --gold:#7b5e2a; --gold-light:#5a4010; --gold-dim:#a08040;
+      --light-sq:#eedca0; --dark-sq:#7a5230;
+      --text:#1a2e1a; --text-dim:#4a6e4a; --border:#b2d8b2;
+      --green:#2e7d32;
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--bg);color:var(--text);font-family:'EB Garamond',Georgia,serif;font-size:17px;line-height:1.7;min-height:100vh;}
+    .page-wrap{max-width:900px;margin:0 auto;padding:0 20px 60px;}
+    header{text-align:center;padding:36px 0 28px;border-bottom:1px solid var(--border);margin-bottom:32px;}
+    .crown{font-size:40px;margin-bottom:10px;filter:drop-shadow(0 0 16px rgba(46,125,50,0.4));animation:float 4s ease-in-out infinite;display:block;}
+    @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+    header h1{font-family:'Playfair Display',serif;font-size:clamp(22px,4vw,38px);font-weight:900;color:var(--gold-light);margin-bottom:6px;}
+    header p{color:var(--text-dim);font-style:italic;font-size:16px;}
+
+    .lobby{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--green);padding:28px 32px;margin-bottom:28px;}
+    .lobby h2{font-family:'Playfair Display',serif;font-size:20px;color:#1a3d1a;margin-bottom:18px;}
+    .lobby-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;}
+    .btn-main{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;padding:12px 28px;border:none;cursor:pointer;transition:all 0.2s;letter-spacing:0.05em;}
+    .btn-create{background:var(--green);color:#fff;}
+    .btn-create:hover{background:#1a5e1e;}
+    .btn-join{background:var(--surface2);border:2px solid var(--green);color:var(--green);}
+    .btn-join:hover{background:rgba(46,125,50,0.1);}
+    .join-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+    .code-input{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;padding:10px 16px;border:2px solid var(--border);background:var(--surface2);color:var(--text);width:140px;text-transform:uppercase;letter-spacing:0.15em;text-align:center;}
+    .code-input:focus{outline:none;border-color:var(--green);}
+    .btn-small{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;padding:10px 20px;border:none;cursor:pointer;background:var(--green);color:#fff;transition:all 0.2s;}
+    .btn-small:hover{background:#1a5e1e;}
+
+    .room-info{background:var(--surface);border:1px solid var(--border);padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+    .room-code-display{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--green);letter-spacing:0.2em;cursor:pointer;}
+    .room-label{font-size:13px;color:var(--text-dim);font-style:italic;}
+    .copy-hint{font-size:12px;color:var(--text-dim);margin-top:2px;}
+    .waiting-msg{background:rgba(46,125,50,0.08);border:1px solid var(--green);padding:12px 18px;color:#1a3d1a;font-size:15px;margin-bottom:16px;text-align:center;font-style:italic;}
+    .player-color{display:inline-block;padding:5px 16px;font-family:'Playfair Display',serif;font-weight:700;font-size:15px;}
+    .player-color.white{background:#fff8e8;border:1px solid #c9a84c;color:#5a4010;}
+    .player-color.black{background:#1a1208;color:#e8c96a;border:1px solid #6a5428;}
+
+    .game-panel{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+    .turn-box{flex:1;min-width:160px;background:var(--surface);border:1px solid var(--border);padding:14px 16px;text-align:center;}
+    .turn-box h4{font-family:'Playfair Display',serif;color:var(--text-dim);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;}
+    .turn-indicator{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;}
+    .turn-indicator.white-turn{color:#5a4010;}
+    .turn-indicator.black-turn{color:var(--green);}
+    .move-log-box{flex:2;min-width:200px;background:var(--surface);border:1px solid var(--border);padding:14px 16px;max-height:120px;overflow-y:auto;}
+    .move-log-box h4{font-family:'Playfair Display',serif;color:var(--text-dim);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;}
+    .move-log{font-size:13px;color:var(--text-dim);}
+    .move-entry{padding:1px 0;border-bottom:1px solid rgba(178,216,178,0.4);}
+    .btn-leave{background:var(--surface2);border:1px solid #c06060;color:#c06060;font-family:'Playfair Display',serif;font-size:13px;padding:8px 16px;cursor:pointer;transition:all 0.2s;}
+    .btn-leave:hover{background:rgba(192,96,96,0.1);}
+
+    .status-msg{text-align:center;font-family:'Playfair Display',serif;font-size:17px;min-height:26px;margin-bottom:12px;color:#1a3d1a;font-weight:600;}
+    .status-msg.check{color:#c07000;animation:pulse 0.5s ease;}
+    .status-msg.checkmate{color:#c03000;font-size:20px;font-weight:700;}
+    @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+
+    .board-container{display:flex;justify-content:center;margin-bottom:24px;overflow-x:auto;padding:6px;}
+    .board-outer{display:inline-block;padding:14px;background:var(--surface);border:1px solid var(--border);box-shadow:0 0 0 1px var(--gold-dim),0 8px 40px rgba(0,0,0,0.12);}
+    .board-with-ranks{display:flex;align-items:stretch;gap:4px;}
+    .rank-labels{display:flex;flex-direction:column;justify-content:space-around;width:18px;}
+    .rank-labels span,.file-labels span{font-size:10px;color:var(--gold-dim);font-family:'EB Garamond',serif;display:flex;align-items:center;justify-content:center;}
+    .file-labels{display:flex;justify-content:space-around;}
+    .chess-board{display:grid;border:1px solid var(--gold-dim);}
+    .sq{display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;transition:filter 0.12s,box-shadow 0.12s;position:relative;}
+    .sq.light{background:var(--light-sq);}
+    .sq.dark{background:var(--dark-sq);}
+    .sq:hover{filter:brightness(1.15);}
+    .sq.selected{box-shadow:inset 0 0 0 3px #f0e040;}
+    .sq.possible{box-shadow:inset 0 0 0 3px rgba(80,200,80,0.7);}
+    .sq.possible::after{content:'';position:absolute;width:28%;height:28%;background:rgba(80,200,80,0.5);border-radius:50%;}
+    .sq.last-move{box-shadow:inset 0 0 0 2px rgba(255,200,50,0.6);}
+    .sq.in-check{box-shadow:inset 0 0 0 3px rgba(220,50,50,0.9);background:#8b2020!important;}
+    .sq.blocked{cursor:default;}
+    .piece-uni{line-height:1;pointer-events:none;}
+    .piece-uni.white{color:#fffae8;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.95));}
+    .piece-uni.black{color:#160e00;filter:drop-shadow(0 1px 2px rgba(255,255,220,0.15));}
+    .piece-new{line-height:1;pointer-events:none;}
+
+    .info-box{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--green);padding:18px 22px;margin-bottom:28px;}
+    .info-box h3{font-family:'Playfair Display',serif;color:#1a3d1a;font-size:17px;margin-bottom:8px;}
+    .info-box p{color:var(--text);font-size:15px;}
+
+    .conn-bar{position:fixed;top:10px;right:10px;background:var(--surface);border:1px solid var(--border);padding:5px 12px;font-size:13px;font-family:'Playfair Display',serif;z-index:100;}
+    .conn-ok{color:var(--green);}
+    .conn-err{color:#c03000;}
+
+    footer{text-align:center;padding:24px 0;border-top:1px solid var(--border);color:var(--text-dim);font-style:italic;font-size:14px;}
+    footer a{color:var(--green);text-decoration:none;}
+    .hidden{display:none!important;}
+
+    @media(max-width:560px){
+      .lobby{padding:18px 16px;}
+      .lobby-btns{flex-direction:column;}
+      .join-row{flex-direction:column;align-items:flex-start;}
+      .room-info{flex-direction:column;}
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="conn-bar" id="connBar"><span class="conn-ok">● Онлайн</span></div>
+
+  <header>
+    <span class="crown">♚</span>
+    <h1>Русские шахматы 10 × 10</h1>
+    <p>Онлайн-игра с другом · vab456123-prog.github.io/Chess760</p>
+  </header>
+
+  <!-- ЛОББИ -->
+  <div class="lobby" id="lobbySection">
+    <h2>♟ Начать онлайн-партию</h2>
+    <div class="lobby-btns">
+      <button class="btn-main btn-create" onclick="createRoom()">🎮 Создать партию</button>
+    </div>
+    <div class="join-row">
+      <input class="code-input" id="joinCodeInput" placeholder="КОД" maxlength="6" oninput="this.value=this.value.toUpperCase()">
+      <button class="btn-small" onclick="joinRoom()">Войти →</button>
+    </div>
+    <p style="margin-top:14px;font-size:14px;color:var(--text-dim);font-style:italic;">
+      Создайте партию и отправьте код другу, или введите код друга чтобы войти в его партию.
+    </p>
+  </div>
+
+  <!-- КОМНАТА -->
+  <div id="roomSection" class="hidden">
+
+    <div class="room-info">
+      <div>
+        <div class="room-label">Код партии — отправьте другу:</div>
+        <div class="room-code-display" id="roomCodeDisplay" onclick="copyCode()">——</div>
+        <div class="copy-hint">нажмите чтобы скопировать</div>
+      </div>
+      <div id="myColorDisplay"></div>
+      <button class="btn-leave" onclick="leaveRoom()">✕ Выйти</button>
+    </div>
+
+    <div class="waiting-msg" id="waitingMsg">
+      ⏳ Ожидаем второго игрока... Отправьте код другу!
+    </div>
+
+    <div class="game-panel">
+      <div class="turn-box">
+        <h4>Ход</h4>
+        <div class="turn-indicator white-turn" id="turnIndicator">♔ Белые</div>
+      </div>
+      <div class="move-log-box">
+        <h4>История ходов</h4>
+        <div class="move-log" id="moveLog"></div>
+      </div>
+    </div>
+
+    <div class="status-msg" id="statusMsg"></div>
+    <div class="board-container" id="boardContainer"></div>
+
+    <div class="info-box">
+      <h3>🏇 Богатырь (ф)</h3>
+      <p>Передвигается по горизонтали, вертикали и диагонали на 1 или 2 клетки. Бьёт на 1-й или 2-й клетке.</p>
+    </div>
+  </div>
+
+  <footer>
+    <a href="file:///C:/Users/Vadim1558/Downloads/index.html">← На главную</a> &nbsp;·&nbsp;
+    <a href="file:///C:/Users/Vadim1558/Downloads/chess.html">Играть локально</a> &nbsp;·&nbsp;
+    vab456123-prog.github.io/Chess760
+  </footer>
+</div>
+
+<script>
+// ════════════════════════════════════════════════
+//  FIREBASE INIT
+// ════════════════════════════════════════════════
+const firebaseConfig = {
+  databaseURL: 'https://megachess-fb04d-default-rtdb.europe-west1.firebasedatabase.app'
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// Статус соединения
+db.ref('.info/connected').on('value', snap => {
+  const el = document.getElementById('connBar');
+  el.innerHTML = snap.val()
+    ? '<span class="conn-ok">● Онлайн</span>'
+    : '<span class="conn-err">● Нет связи</span>';
+});
+
+// ════════════════════════════════════════════════
+//  КОНСТАНТЫ ШАХМАТ
+// ════════════════════════════════════════════════
+const UNI = {
+  'Кр':{w:'♔',b:'♚'}, 'Ф':{w:'♕',b:'♛'},
+  'Л': {w:'♖',b:'♜'}, 'С':{w:'♗',b:'♝'},
+  'К': {w:'♘',b:'♞'}, 'п':{w:'♙',b:'♟'},
+};
+const NEW_EMOJI = {'ф':'🏇'};
+const N    = 10;
+const BACK = ['ф','Л','К','С','Ф','Кр','С','К','Л','ф'];
+const FILES= ['a','b','c','d','e','f','g','h','i','j'];
+
+// ════════════════════════════════════════════════
+//  ЛОГИКА ХОДОВ
+// ════════════════════════════════════════════════
+function inB(r,c){ return r>=0&&r<N&&c>=0&&c<N; }
+
+function sliding(board,r,c,dirs,side,limit){
+  const moves=[];
+  for(const [dr,dc] of dirs){
+    for(let s=1;s<=limit;s++){
+      const nr=r+dr*s,nc=c+dc*s;
+      if(!inB(nr,nc)) break;
+      if(board[nr][nc]&&board[nr][nc].side===side) break;
+      moves.push({r:nr,c:nc});
+      if(board[nr][nc]) break;
+    }
+  }
+  return moves;
+}
+
+function rawMoves(board,r,c){
+  const p=board[r][c]; if(!p) return [];
+  const {abbr,side}=p;
+  if(abbr==='Л') return sliding(board,r,c,[[1,0],[-1,0],[0,1],[0,-1]],side,N);
+  if(abbr==='С') return sliding(board,r,c,[[1,1],[1,-1],[-1,1],[-1,-1]],side,N);
+  if(abbr==='Ф') return sliding(board,r,c,[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]],side,N);
+  if(abbr==='ф') return sliding(board,r,c,[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]],side,2);
+  if(abbr==='Кр'){
+    const m=[];
+    for(const [dr,dc] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]){
+      const nr=r+dr,nc=c+dc;
+      if(inB(nr,nc)&&!(board[nr][nc]&&board[nr][nc].side===side)) m.push({r:nr,c:nc});
+    }
+    return m;
+  }
+  if(abbr==='К'){
+    const m=[];
+    for(const [dr,dc] of [[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]]){
+      const nr=r+dr,nc=c+dc;
+      if(inB(nr,nc)&&!(board[nr][nc]&&board[nr][nc].side===side)) m.push({r:nr,c:nc});
+    }
+    return m;
+  }
+  if(abbr==='п'){
+    const m=[],dir=side==='white'?-1:1,sr=side==='white'?N-2:1;
+    if(inB(r+dir,c)&&!board[r+dir][c]){
+      m.push({r:r+dir,c});
+      if(r===sr&&!board[r+dir*2][c]) m.push({r:r+dir*2,c});
+    }
+    for(const dc of [-1,1])
+      if(inB(r+dir,c+dc)&&board[r+dir][c+dc]&&board[r+dir][c+dc].side!==side)
+        m.push({r:r+dir,c:c+dc});
+    return m;
+  }
+  return [];
+}
+
+function cloneB(b){ return b.map(row=>row.map(c=>c?{...c}:null)); }
+
+function findKing(board,side){
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++)
+    if(board[r][c]&&board[r][c].abbr==='Кр'&&board[r][c].side===side) return {r,c};
+  return null;
+}
+
+function attacked(board,r,c,bySide){
+  for(let rr=0;rr<N;rr++) for(let cc=0;cc<N;cc++)
+    if(board[rr][cc]&&board[rr][cc].side===bySide)
+      if(rawMoves(board,rr,cc).find(m=>m.r===r&&m.c===c)) return true;
+  return false;
+}
+
+function legalMoves(board,r,c){
+  const p=board[r][c]; if(!p) return [];
+  const opp=p.side==='white'?'black':'white';
+  return rawMoves(board,r,c).filter(m=>{
+    const b2=cloneB(board);
+    b2[m.r][m.c]=b2[r][c]; b2[r][c]=null;
+    const k=findKing(b2,p.side);
+    return k&&!attacked(b2,k.r,k.c,opp);
+  });
+}
+
+function hasAnyMove(board,side){
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++)
+    if(board[r][c]&&board[r][c].side===side&&legalMoves(board,r,c).length>0) return true;
+  return false;
+}
+
+function initBoard(){
+  const b=Array.from({length:N},()=>Array(N).fill(null));
+  BACK.forEach((p,c)=>{ b[0][c]={abbr:p,side:'black'}; b[N-1][c]={abbr:p,side:'white'}; });
+  for(let c=0;c<N;c++){ b[1][c]={abbr:'п',side:'black'}; b[N-2][c]={abbr:'п',side:'white'}; }
+  return b;
+}
+
+// ════════════════════════════════════════════════
+//  СОСТОЯНИЕ ИГРЫ
+// ════════════════════════════════════════════════
+let roomCode = null;
+let myColor  = null;
+let board    = [];
+let turn     = 'white';
+let selected = null;
+let lastMove = null;
+let moveCount= 0;
+let gameOver = false;
+let roomListener = null;
+
+// ════════════════════════════════════════════════
+//  СЕРИАЛИЗАЦИЯ
+// ════════════════════════════════════════════════
+function boardToArr(b){
+  return b.map(row=>row.map(c=>c?c.abbr+'|'+c.side:'0'));
+}
+function arrToBoard(a){
+  return a.map(row=>row.map(c=>{
+    if(c==='0') return null;
+    const [abbr,side]=c.split('|');
+    return {abbr,side};
+  }));
+}
+
+// ════════════════════════════════════════════════
+//  КОД КОМНАТЫ
+// ════════════════════════════════════════════════
+function genCode(){
+  const ch='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code='';
+  for(let i=0;i<6;i++) code+=ch[Math.floor(Math.random()*ch.length)];
+  return code;
+}
+
+// ════════════════════════════════════════════════
+//  СОЗДАТЬ КОМНАТУ
+// ════════════════════════════════════════════════
+function createRoom(){
+  const code=genCode();
+  roomCode=code;
+  myColor='white';
+  const state={
+    board:boardToArr(initBoard()),
+    turn:'white',
+    moveCount:0,
+    lastMove:null,
+    gameOver:false,
+    statusMsg:'',
+    moves:[],
+    players:{white:true,black:false}
+  };
+  db.ref('rooms/'+code).set(state).then(()=>enterRoom(code));
+}
+
+// ════════════════════════════════════════════════
+//  ВОЙТИ В КОМНАТУ
+// ════════════════════════════════════════════════
+function joinRoom(){
+  const code=document.getElementById('joinCodeInput').value.trim().toUpperCase();
+  if(code.length<4){ alert('Введите код партии!'); return; }
+  db.ref('rooms/'+code).get().then(snap=>{
+    if(!snap.exists()){ alert('Партия не найдена. Проверьте код.'); return; }
+    const data=snap.val();
+    if(data.players&&data.players.black){ alert('В партии уже два игрока!'); return; }
+    db.ref('rooms/'+code+'/players/black').set(true).then(()=>{
+      roomCode=code; myColor='black';
+      enterRoom(code);
+    });
+  });
+}
+
+// ════════════════════════════════════════════════
+//  ВОЙТИ В ИНТЕРФЕЙС
+// ════════════════════════════════════════════════
+function enterRoom(code){
+  document.getElementById('lobbySection').classList.add('hidden');
+  document.getElementById('roomSection').classList.remove('hidden');
+  document.getElementById('roomCodeDisplay').textContent=code;
+
+  const colorEl=document.getElementById('myColorDisplay');
+  colorEl.innerHTML=myColor==='white'
+    ? '<span class="player-color white">♔ Вы — Белые</span>'
+    : '<span class="player-color black">♚ Вы — Чёрные</span>';
+
+  // Слушаем изменения в реальном времени
+  roomListener=db.ref('rooms/'+code).on('value', snap=>{
+    if(!snap.exists()) return;
+    const data=snap.val();
+
+    // Ожидание игрока
+    const waitEl=document.getElementById('waitingMsg');
+    waitEl.style.display=(data.players&&data.players.white&&data.players.black)?'none':'block';
+
+    // Синхронизируем
+    board    =arrToBoard(data.board);
+    turn     =data.turn;
+    gameOver =data.gameOver||false;
+    lastMove =data.lastMove||null;
+    moveCount=data.moveCount||0;
+
+    // Лог
+    const logEl=document.getElementById('moveLog');
+    logEl.innerHTML='';
+    if(data.moves&&Array.isArray(data.moves)){
+      data.moves.forEach(m=>{
+        const e=document.createElement('div');
+        e.className='move-entry'; e.textContent=m;
+        logEl.appendChild(e);
+      });
+      logEl.scrollTop=logEl.scrollHeight;
+    }
+
+    // Статус мата/пата
+    const msgEl=document.getElementById('statusMsg');
+    if(gameOver&&data.statusMsg){
+      msgEl.textContent=data.statusMsg;
+      msgEl.className='status-msg checkmate';
+    } else {
+      updateStatusMsg();
+    }
+
+    updateTurnDisplay();
+    renderBoard();
+  });
+}
+
+// ════════════════════════════════════════════════
+//  ВЫЙТИ
+// ════════════════════════════════════════════════
+function leaveRoom(){
+  if(roomListener) db.ref('rooms/'+roomCode).off('value',roomListener);
+  roomCode=null; myColor=null; selected=null;
+  document.getElementById('lobbySection').classList.remove('hidden');
+  document.getElementById('roomSection').classList.add('hidden');
+  document.getElementById('boardContainer').innerHTML='';
+  document.getElementById('moveLog').innerHTML='';
+  document.getElementById('statusMsg').textContent='';
+  document.getElementById('waitingMsg').style.display='block';
+}
+
+// ════════════════════════════════════════════════
+//  СКОПИРОВАТЬ КОД
+// ════════════════════════════════════════════════
+function copyCode(){
+  if(!roomCode) return;
+  navigator.clipboard.writeText(roomCode).catch(()=>{});
+  const el=document.getElementById('roomCodeDisplay');
+  const old=el.textContent;
+  el.textContent='✓ Скопировано!';
+  setTimeout(()=>{ el.textContent=old; },1500);
+}
+
+// ════════════════════════════════════════════════
+//  КЛИК ПО КЛЕТКЕ
+// ════════════════════════════════════════════════
+function handleClick(r,c){
+  if(gameOver) return;
+  if(turn!==myColor) return;
+
+  const piece=board[r][c];
+
+  if(!selected){
+    if(piece&&piece.side===myColor){ selected={r,c}; renderBoard(); }
+    return;
+  }
+  if(piece&&piece.side===myColor){ selected={r,c}; renderBoard(); return; }
+
+  const legal=legalMoves(board,selected.r,selected.c);
+  const valid=legal.find(m=>m.r===r&&m.c===c);
+  if(!valid){ selected=null; renderBoard(); return; }
+
+  // Делаем ход
+  const moving=board[selected.r][selected.c];
+  const captured=board[r][c];
+  const nb=cloneB(board);
+  nb[r][c]=moving; nb[selected.r][selected.c]=null;
+
+  // Превращение пешки
+  if(moving.abbr==='п'){
+    if(moving.side==='white'&&r===0) nb[r][c]={abbr:'Ф',side:'white'};
+    if(moving.side==='black'&&r===N-1) nb[r][c]={abbr:'Ф',side:'black'};
+  }
+
+  const nextTurn=myColor==='white'?'black':'white';
+  const newCount=moveCount+1;
+  const moveStr=`${FILES[selected.c]}${N-selected.r}→${FILES[c]}${N-r}${captured?'×':''}`;
+  const moveLabel=newCount%2===1?`${Math.ceil(newCount/2)}. ${moveStr}`:`   ${moveStr}`;
+
+  // Проверка мата/пата
+  const nextKing=findKing(nb,nextTurn);
+  const opp=nextTurn==='white'?'black':'white';
+  const nextCheck=nextKing&&attacked(nb,nextKing.r,nextKing.c,opp);
+  const nextHas=hasAnyMove(nb,nextTurn);
+  let over=false,statusStr='';
+  if(!nextHas){
+    over=true;
+    if(nextCheck) statusStr=myColor==='white'?'♚ Мат! Белые победили!':'♚ Мат! Чёрные победили!';
+    else statusStr='½ Пат — ничья!';
+  }
+
+  // Записываем в Firebase
+  db.ref('rooms/'+roomCode+'/moves').get().then(snap=>{
+    const moves=snap.val()||[];
+    const updMoves=Array.isArray(moves)?[...moves]:[...Object.values(moves)];
+    updMoves.push(moveLabel);
+    db.ref('rooms/'+roomCode).update({
+      board:boardToArr(nb),
+      turn:nextTurn,
+      moveCount:newCount,
+      lastMove:{fr:selected.r,fc:selected.c,tr:r,tc:c},
+      gameOver:over,
+      statusMsg:statusStr,
+      moves:updMoves
+    });
+  });
+
+  selected=null;
+}
+
+// ════════════════════════════════════════════════
+//  ОТОБРАЖЕНИЕ
+// ════════════════════════════════════════════════
+function updateTurnDisplay(){
+  const el=document.getElementById('turnIndicator');
+  if(turn==='white'){
+    el.className='turn-indicator white-turn';
+    el.textContent='♔ Белые';
+  } else {
+    el.className='turn-indicator black-turn';
+    el.textContent='♚ Чёрные';
+  }
+}
+
+function updateStatusMsg(){
+  const msgEl=document.getElementById('statusMsg');
+  if(gameOver) return;
+
+  // Проверка шаха
+  const king=findKing(board,turn);
+  const opp=turn==='white'?'black':'white';
+  const inCheck=king&&attacked(board,king.r,king.c,opp);
+
+  if(turn===myColor){
+    msgEl.textContent=inCheck?'⚠️ Шах! Ваш ход!':'✅ Ваш ход!';
+    msgEl.className=inCheck?'status-msg check':'status-msg';
+  } else {
+    msgEl.textContent=inCheck?'⚠️ Шах сопернику!':'⏳ Ход соперника...';
+    msgEl.className=inCheck?'status-msg check':'status-msg';
+  }
+}
+
+function makePieceEl(abbr,side,sq){
+  if(UNI[abbr]){
+    const s=document.createElement('span');
+    s.className='piece-uni '+side;
+    s.textContent=UNI[abbr][side==='white'?'w':'b'];
+    s.style.fontSize=Math.round(sq*0.62)+'px';
+    return s;
+  }
+  if(NEW_EMOJI[abbr]){
+    const s=document.createElement('span');
+    s.className='piece-new';
+    s.textContent=NEW_EMOJI[abbr];
+    s.style.fontSize=Math.round(sq*0.50)+'px';
+    if(side==='black') s.style.filter='brightness(0.35) sepia(0.3)';
+    return s;
+  }
+  return null;
+}
+
+function renderBoard(){
+  const sq=50;
+  const cont=document.getElementById('boardContainer');
+  cont.innerHTML='';
+  const outer=document.createElement('div'); outer.className='board-outer';
+  const flip=myColor==='black';
+
+  // Метки сверху
+  const topLbl=document.createElement('div'); topLbl.className='file-labels';
+  topLbl.style.cssText=`margin-left:22px;margin-bottom:3px;width:${N*sq}px;`;
+  const fileOrder=flip?[...FILES].reverse():FILES;
+  fileOrder.forEach(f=>{ const s=document.createElement('span');s.textContent=f;s.style.width=sq+'px';topLbl.appendChild(s); });
+  outer.appendChild(topLbl);
+
+  const wr=document.createElement('div'); wr.className='board-with-ranks';
+
+  const makeRanks=()=>{
+    const d=document.createElement('div'); d.className='rank-labels';
+    const arr=Array.from({length:N},(_,i)=>flip?i+1:N-i);
+    arr.forEach(n=>{ const s=document.createElement('span');s.textContent=n;s.style.height=sq+'px';d.appendChild(s); });
+    return d;
+  };
+
+  const chess=document.createElement('div'); chess.className='chess-board';
+  chess.style.cssText=`grid-template-columns:repeat(${N},${sq}px);grid-template-rows:repeat(${N},${sq}px);`;
+
+  const possible=selected?legalMoves(board,selected.r,selected.c).map(m=>`${m.r},${m.c}`):[];
+  const king=findKing(board,turn);
+  const opp2=turn==='white'?'black':'white';
+  const inCheck=king&&attacked(board,king.r,king.c,opp2);
+
+  const rowOrder=flip?Array.from({length:N},(_,i)=>N-1-i):Array.from({length:N},(_,i)=>i);
+  const colOrder=flip?Array.from({length:N},(_,i)=>N-1-i):Array.from({length:N},(_,i)=>i);
+
+  for(const r of rowOrder){
+    for(const c of colOrder){
+      const cell=document.createElement('div');
+      let cls='sq '+((r+c)%2===0?'light':'dark');
+      if(selected&&selected.r===r&&selected.c===c) cls+=' selected';
+      if(possible.includes(`${r},${c}`)) cls+=' possible';
+      if(lastMove&&((lastMove.fr===r&&lastMove.fc===c)||(lastMove.tr===r&&lastMove.tc===c))) cls+=' last-move';
+      if(inCheck&&king&&king.r===r&&king.c===c) cls+=' in-check';
+      if(turn!==myColor||gameOver) cls+=' blocked';
+      cell.className=cls;
+      cell.style.width=sq+'px'; cell.style.height=sq+'px';
+      const p=board[r][c];
+      if(p){ const el=makePieceEl(p.abbr,p.side,sq); if(el) cell.appendChild(el); }
+      cell.addEventListener('click',()=>handleClick(r,c));
+      chess.appendChild(cell);
+    }
+  }
+
+  wr.appendChild(makeRanks()); wr.appendChild(chess); wr.appendChild(makeRanks());
+  outer.appendChild(wr);
+
+  const botLbl=document.createElement('div'); botLbl.className='file-labels';
+  botLbl.style.cssText=`margin-left:22px;margin-top:3px;width:${N*sq}px;`;
+  fileOrder.forEach(f=>{ const s=document.createElement('span');s.textContent=f;s.style.width=sq+'px';botLbl.appendChild(s); });
+  outer.appendChild(botLbl);
+  cont.appendChild(outer);
+}
+</script>
+
+
+</body></html>
