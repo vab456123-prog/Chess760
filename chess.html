@@ -3,7 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Большие шахматы — vab456123-prog.github.io/Chess760</title>
+  <title>Chess760 — Шахматы 760</title>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-624E2Z61XF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-624E2Z61XF');
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -143,15 +151,7 @@
     <button class="lang-btn" onclick="setLang('en',this)">🇬🇧 English</button>
   </div>
 
-  <header>
-    <div class="crown">♚</div>
-    <h1 data-ru="Большие шахматы" data-en="Grand Chess">Большие шахматы</h1>
-    <p data-ru="Многоуровневые шахматные варианты — от классики 8×8 до Морских шахмат 16×16. Свидетельство на полезную модель, Российская Федерация."
-       data-en="Multi-level chess variants — from classic 8×8 to Grand Sea Chess 16×16. Utility model certificate, Russian Federation.">
-       Многоуровневые шахматные варианты — от классики 8×8 до Морских шахмат 16×16. Свидетельство на полезную модель, Российская Федерация.</p>
-  </header>
-
-  <div class="switcher-wrap">
+  <div class="switcher-wrap" style="margin-top:24px;">
     <button class="tab-btn has-game" onclick="showBoard('b8',this)" data-ru="8 × 8 ▶" data-en="8 × 8 ▶">8 × 8 ▶</button>
     <button class="tab-btn has-game active" onclick="showBoard('b10',this)" data-ru="10 × 10 ▶" data-en="10 × 10 ▶">10 × 10 ▶</button>
     <button class="tab-btn has-game" onclick="showBoard('b12',this)" data-ru="12 × 12 ▶" data-en="12 × 12 ▶">12 × 12 ▶</button>
@@ -212,28 +212,29 @@
         <span data-ru="Режим:" data-en="Mode:">Режим:</span>
         <button class="mode-btn active" id="modeHuman" onclick="setMode('human')" data-ru="👥 Вдвоём" data-en="👥 Two Players">👥 Вдвоём</button>
         <button class="mode-btn" id="modeAI" onclick="setMode('ai')" data-ru="🤖 Против ИИ" data-en="🤖 vs AI">🤖 Против ИИ</button>
+        <a href="chess10_online.html" class="mode-btn" style="text-decoration:none;color:var(--text);" data-ru="🌐 Играть онлайн" data-en="🌐 Play Online">🌐 Играть онлайн</a>
       </div>
       <div class="ai-level-row" id="aiLevelRow" style="display:none;">
         <span data-ru="Уровень ИИ:" data-en="AI Level:">Уровень ИИ:</span>
-        <button class="level-btn active" id="lvl1" onclick="setAILevel(1)" data-ru="😊 Лёгкий" data-en="😊 Easy">😊 Лёгкий</button>
-        <button class="level-btn" id="lvl2" onclick="setAILevel(2)" data-ru="🧠 Средний" data-en="🧠 Medium">🧠 Средний</button>
-        <button class="level-btn" id="lvl3" onclick="setAILevel(3)" data-ru="💀 Сложный" data-en="💀 Hard">💀 Сложный</button>
+        <button class="level-btn active" id="lvl1" onclick="setAILevel(1)" data-ru="Лёгкий" data-en="Easy">Лёгкий</button>
+        <button class="level-btn" id="lvl2" onclick="setAILevel(2)" data-ru="Средний" data-en="Medium">Средний</button>
+        <button class="level-btn" id="lvl3" onclick="setAILevel(3)" data-ru="Сложный" data-en="Hard">Сложный</button>
       </div>
     </div>
     <!-- Панель игры -->
     <div class="game-panel">
       <div class="turn-box">
         <h4 data-ru="Ход" data-en="Turn">Ход</h4>
-        <div class="turn-indicator white-turn" id="turnIndicator">♔ <span data-ru="Белые" data-en="White">Белые</span></div>
+        <div class="turn-indicator white-turn" id="turnIndicator10">♔ <span data-ru="Белые" data-en="White">Белые</span></div>
       </div>
       <div class="move-log-box">
         <h4 data-ru="История ходов" data-en="Move History">История ходов</h4>
-        <div class="move-log" id="moveLog"></div>
+        <div class="move-log" id="moveLog10"></div>
       </div>
       <button class="btn-reset" onclick="resetGame()" data-ru="🔄 Новая игра" data-en="🔄 New Game">🔄 Новая игра</button>
     </div>
-    <div class="status-msg" id="statusMsg"></div>
-    <div class="ai-thinking" id="aiThinking"></div>
+    <div class="status-msg" id="statusMsg10"></div>
+    <div class="ai-thinking" id="aiThinking10"></div>
     <div class="board-container" id="board10"></div>
     <div class="legend-grid">
       <div class="legend-card">
@@ -428,7 +429,7 @@
     </div>
   </div>
 
-  <div class="version-tag" data-ru="Версия: июнь 2026" data-en="Version: June 2026">Версия: июнь 2026</div>
+  <div class="version-tag" data-ru="Версия: июль 2026" data-en="Version: June 2026">Версия: июль 2026</div>
 
   <footer>
     <a href="index.html" data-ru="← На главную" data-en="← Home">← На главную</a> &nbsp;·&nbsp;
@@ -841,7 +842,7 @@ function cfg_files(n){ return SETUPS['b'+n].files; }
 function resetGame8(){ initGame(8); renderGameBoard(8); }
 function resetGame(){
   if(aiThinkingTimer) clearTimeout(aiThinkingTimer);
-  const thinkEl = document.getElementById('aiThinking');
+  const thinkEl = document.getElementById('aiThinking10');
   if(thinkEl) thinkEl.textContent = '';
   initGame(10); renderGameBoard(10);
 }
@@ -919,18 +920,104 @@ function makePieceEl(abbr,side,sq){
     return s;
   }
   if(NEW.has(abbr)){
-    const s=document.createElement('span');
-    s.className='piece-new';
-    s.textContent=NEW_EMOJI[abbr];
-    s.style.fontSize=Math.round(sq*0.52)+'px';
-    s.style.lineHeight='1';
-    // Тёмный фильтр для чёрных фигур
-    if(side==='black'){
-      s.style.filter='brightness(0.35) sepia(0.3)';
-    }
-    return s;
+    return makeSVGPiece(abbr,side,sq);
   }
   return null;
+}
+
+// ════════════════════════════════════════════════════
+//  SVG ФИГУРЫ Chess760
+// ════════════════════════════════════════════════════
+function makeSVGPiece(abbr,side,sq){
+  const w = side==='white';
+  const fill   = w ? '#fffae8' : '#2a1a00';
+  const stroke = w ? '#5a4010' : '#c9a84c';
+  const detail = w ? '#c9a84c' : '#e8c96a';
+  const inner  = w ? '#5a4010' : '#c9a84c';
+
+  const div = document.createElement('div');
+  div.style.cssText=`width:${sq}px;height:${sq}px;display:flex;align-items:center;justify-content:center;`;
+
+  const size = Math.round(sq * 0.86);
+  let svg = '';
+
+  if(abbr==='ф'){
+    // БОГАТЫРЬ — рыцарь в шлеме с плюмажем
+    svg=`<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect x="18" y="88" width="64" height="9" rx="3" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="30" y="68" width="40" height="22" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="22" y="44" width="56" height="27" rx="4" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <line x1="26" y1="52" x2="74" y2="52" stroke="${detail}" stroke-width="2.5"/>
+      <line x1="26" y1="60" x2="74" y2="60" stroke="${detail}" stroke-width="2.5"/>
+      <rect x="38" y="34" width="24" height="13" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <ellipse cx="50" cy="27" rx="20" ry="16" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="38" y="22" width="24" height="10" rx="2" fill="${inner}" opacity="0.25"/>
+      <line x1="38" y1="14" x2="34" y2="2" stroke="${detail}" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="50" y1="11" x2="50" y2="0" stroke="${detail}" stroke-width="3" stroke-linecap="round"/>
+      <line x1="62" y1="14" x2="66" y2="2" stroke="${detail}" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="34" cy="2" r="3" fill="${detail}"/>
+      <circle cx="50" cy="0" r="3.5" fill="${detail}"/>
+      <circle cx="66" cy="2" r="3" fill="${detail}"/>
+    </svg>`;
+  }
+  else if(abbr==='Лс'){
+    // БОЛЬШАЯ ПЕШКА — контур ладьи, внутри слон
+    svg=`<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect x="12" y="89" width="76" height="9" rx="3" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="20" y="68" width="60" height="23" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="15" y="61" width="70" height="10" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="20" y="36" width="60" height="27" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="20" y="24" width="16" height="15" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="42" y="24" width="16" height="15" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="64" y="24" width="16" height="15" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="38" y="80" width="24" height="6" rx="2" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <ellipse cx="50" cy="64" rx="14" ry="17" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <ellipse cx="50" cy="46" rx="10" ry="10" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <ellipse cx="50" cy="34" rx="6" ry="7" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <circle cx="50" cy="26" r="4" fill="none" stroke="${inner}" stroke-width="1.8"/>
+    </svg>`;
+  }
+  else if(abbr==='Кк'){
+    // ЦАРЬ-ПУШКА — пушка на колёсах с короной
+    svg=`<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="26" cy="82" r="14" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <circle cx="26" cy="82" r="7" fill="${detail}" opacity="0.35"/>
+      <circle cx="74" cy="82" r="14" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <circle cx="74" cy="82" r="7" fill="${detail}" opacity="0.35"/>
+      <rect x="18" y="60" width="64" height="24" rx="4" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="22" y="65" width="56" height="5" rx="2" fill="${detail}" opacity="0.4"/>
+      <rect x="22" y="38" width="58" height="25" rx="5" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="72" y="40" width="20" height="21" rx="5" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <ellipse cx="93" cy="50" rx="7" ry="10" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <ellipse cx="93" cy="50" rx="4" ry="6" fill="${inner}" opacity="0.3"/>
+      <rect x="30" y="26" width="40" height="14" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <polygon points="32,26 39,14 46,26" fill="${detail}" stroke="${stroke}" stroke-width="1"/>
+      <polygon points="46,26 50,12 54,26" fill="${detail}" stroke="${stroke}" stroke-width="1"/>
+      <polygon points="54,26 61,14 68,26" fill="${detail}" stroke="${stroke}" stroke-width="1"/>
+      <circle cx="42" cy="6" r="9" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <circle cx="39" cy="4" r="3" fill="${detail}" opacity="0.35"/>
+    </svg>`;
+  }
+  else if(abbr==='Сл'){
+    // МОРЯК — контур слона, внутри ладья
+    svg=`<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect x="28" y="89" width="44" height="9" rx="3" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <ellipse cx="50" cy="68" rx="28" ry="28" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <ellipse cx="50" cy="40" rx="20" ry="20" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <ellipse cx="50" cy="22" rx="12" ry="14" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <circle cx="50" cy="8" r="7" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <path d="M44 18 Q50 13 56 18" fill="none" stroke="${stroke}" stroke-width="2"/>
+      <rect x="33" y="50" width="9" height="8" rx="1" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <rect x="45" y="50" width="9" height="8" rx="1" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <rect x="57" y="50" width="9" height="8" rx="1" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <rect x="31" y="57" width="37" height="14" rx="2" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <rect x="28" y="69" width="43" height="6" rx="2" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <rect x="31" y="74" width="37" height="12" rx="2" fill="none" stroke="${inner}" stroke-width="1.8"/>
+    </svg>`;
+  }
+
+  div.innerHTML = svg;
+  return div;
 }
 
 // ════════════════════════════════════════════════════
@@ -1089,31 +1176,141 @@ function doAIMove(){
   const g = games[10];
   if(g.gameOver || g.turn !== 'black' || !aiMode) return;
 
-  const thinkEl = document.getElementById('aiThinking');
+  const thinkEl = document.getElementById('aiThinking10');
   if(thinkEl) thinkEl.textContent = LANG==='ru' ? '🤖 ИИ думает...' : '🤖 AI thinking...';
 
-  // Небольшая задержка чтобы браузер успел отрисовать
   aiThinkingTimer = setTimeout(()=>{
-    const move = getAIMove(g.board, 'black', 10, aiLevel);
-    if(thinkEl) thinkEl.textContent = '';
-    if(move){
-      // Применяем ход через существующую логику
-      const fakeClick1 = ()=>{ g.selected = {r:move.fr, c:move.fc}; };
-      fakeClick1();
-      handleClickN(10, move.tr, move.tc);
+    try {
+      const move = getAIMove(g.board, 'black', 10, aiLevel);
+      if(thinkEl) thinkEl.textContent = '';
+      if(move){
+        // Применяем ход напрямую без handleClickN чтобы избежать блокировки
+        const moving = g.board[move.fr][move.fc];
+        const captured = g.board[move.tr][move.tc];
+        g.board[move.tr][move.tc] = moving;
+        g.board[move.fr][move.fc] = null;
+
+        // Счётчик ничьей
+        if(captured || moving.abbr==='п') g.noCapture=0; else g.noCapture++;
+
+        // Превращение пешки
+        if(moving.abbr==='п' && move.tr===9)
+          g.board[move.tr][move.tc]={abbr:'Ф',side:'black'};
+
+        g.lastMove={fr:move.fr,fc:move.fc,tr:move.tr,tc:move.tc};
+        g.moveCount++;
+
+        // Запись хода в лог
+        const files=SETUPS['b10'].files;
+        const capSym=captured?'×':'';
+        const moveStr=`${files[move.fc]}${10-move.fr}→${files[move.tc]}${10-move.tr}${capSym}`;
+        const logEl=document.getElementById('moveLog10');
+        if(logEl){
+          const entry=document.createElement('div');
+          entry.className='move-entry';
+          const num=Math.ceil(g.moveCount/2);
+          entry.textContent=g.moveCount%2===1?`${num}. ${moveStr}`:`   ${moveStr}`;
+          logEl.appendChild(entry);
+          logEl.scrollTop=logEl.scrollHeight;
+        }
+
+        g.selected=null;
+        g.turn='white';
+
+        // Проверка мата/пата
+        const msgEl=document.getElementById('statusMsg10');
+        const nextKing=findKing(g.board,'white',10);
+        const inCheck=nextKing&&isAttacked(g.board,nextKing.r,nextKing.c,'black',10);
+        const hasMoves=hasAnyMove(g.board,'white',10);
+
+        if(!hasMoves){
+          g.gameOver=true;
+          if(msgEl){
+            msgEl.textContent=inCheck
+              ? (LANG==='ru'?'♚ Мат! Чёрные победили!':'♚ Checkmate! Black wins!')
+              : (LANG==='ru'?'½ Пат — ничья!':'½ Stalemate — draw!');
+            msgEl.className='status-msg checkmate';
+          }
+        } else if(g.noCapture>=50){
+          g.gameOver=true;
+          if(msgEl){ msgEl.textContent=LANG==='ru'?'½ Ничья (50 ходов)!':'½ Draw (50 moves)!'; msgEl.className='status-msg checkmate'; }
+        } else if(inCheck && msgEl){
+          msgEl.textContent=LANG==='ru'?'⚠️ Шах!':'⚠️ Check!';
+          msgEl.className='status-msg check';
+        } else if(msgEl){
+          msgEl.textContent=''; msgEl.className='status-msg';
+        }
+
+        updateTurnDisplayN(10);
+        renderGameBoard(10);
+      }
+    } catch(e) {
+      if(thinkEl) thinkEl.textContent = '';
+      console.error('AI error:', e);
     }
-  }, aiLevel === 3 ? 400 : 200);
+  }, aiLevel === 3 ? 600 : 300);
 }
+
+// ════════════════════════════════════════════════════
+//  СОХРАНЕНИЕ ПАРТИИ
+// ════════════════════════════════════════════════════
+function saveGame(n){
+  const g = games[n];
+  const log = document.getElementById('moveLog'+n);
+  if(!log || !log.innerHTML.trim()){
+    alert(LANG==='ru' ? 'Нет ходов для сохранения!' : 'No moves to save!');
+    return;
+  }
+
+  // Собираем все ходы
+  const moves = [];
+  log.querySelectorAll('.move-entry').forEach(el => moves.push(el.textContent));
+
+  // Создаём текстовый файл
+  const date = new Date().toLocaleDateString('ru-RU');
+  const boardNames = {8:'Классические 8×8', 10:'Русские 10×10', 12:'Большие 12×12', 14:'Царские 14×14', 16:'Морские 16×16'};
+  let text = `Chess760 — ${boardNames[n]}\nДата: ${date}\nИтог: ${g.gameOver ? document.getElementById('statusMsg'+n).textContent : 'Партия не окончена'}\n\n`;
+  text += moves.join('\n');
+
+  const blob = new Blob([text], {type: 'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `chess760_${n}x${n}_${date.replace(/\./g,'-')}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Добавляем кнопки сохранения в панели игр
+function addSaveButtons(){
+  [8,10,12,14,16].forEach(n=>{
+    const resetBtn = document.querySelector(`button[onclick="resetGame${n===10?'':n}()"]`);
+    if(resetBtn && !document.getElementById('saveBtn'+n)){
+      const saveBtn = document.createElement('button');
+      saveBtn.id = 'saveBtn'+n;
+      saveBtn.className = 'btn-reset';
+      saveBtn.style.cssText = 'background:rgba(46,125,50,0.1);border-color:var(--green);color:var(--green);margin-left:6px;';
+      saveBtn.setAttribute('data-ru', '💾 Сохранить');
+      saveBtn.setAttribute('data-en', '💾 Save');
+      saveBtn.textContent = '💾 Сохранить';
+      saveBtn.onclick = () => saveGame(n);
+      resetBtn.parentNode.insertBefore(saveBtn, resetBtn.nextSibling);
+    }
+  });
+}
+
+initGame(8);  renderGameBoard(8);
 initGame(10); renderGameBoard(10);
 initGame(12); renderGameBoard(12);
 initGame(14); renderGameBoard(14);
 initGame(16); renderGameBoard(16);
+addSaveButtons();
 
 // Автопереход на нужную доску по якорю в URL (например chess.html#b12)
 (function(){
-  const hash = window.location.hash; // '#b12'
+  const hash = window.location.hash;
   if(hash){
-    const id = hash.replace('#',''); // 'b12'
+    const id = hash.replace('#','');
     const section = document.getElementById(id);
     const btn = document.querySelector(`.tab-btn[onclick*="'${id}'"]`);
     if(section && btn){
