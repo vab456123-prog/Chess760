@@ -66,7 +66,38 @@
     .coming-banner .gb-icon{font-size:22px;}
 
     /* Доска */
-    .board-container{display:flex;justify-content:center;margin-bottom:32px;overflow-x:auto;padding:8px;}
+    .board-container{display:flex;justify-content:center;margin-bottom:32px;overflow-x:auto;padding:8px;
+      /* Центрируем содержимое на мобильных */
+      -webkit-overflow-scrolling:touch;
+    }
+    /* Центрируем доску на маленьких экранах */
+    @media(max-width:600px){
+      .board-container{
+        justify-content:flex-start;
+        padding:4px;
+      }
+      .board-outer{
+        margin:0 auto;
+      }
+      .page-wrap{
+        padding:0 8px 60px;
+      }
+      .switcher-wrap{
+        gap:4px;
+      }
+      .tab-btn{
+        padding:8px 10px;
+        font-size:12px;
+      }
+      .game-panel{
+        flex-direction:column;
+        gap:8px;
+      }
+      .turn-box, .move-log-box{
+        min-width:unset;
+        width:100%;
+      }
+    }
     .board-outer{display:inline-block;padding:16px;background:var(--surface);border:1px solid var(--border);box-shadow:0 0 0 1px var(--gold-dim),0 12px 60px rgba(0,0,0,0.7);}
     .board-with-ranks{display:flex;align-items:stretch;gap:4px;}
     .rank-labels{display:flex;flex-direction:column;justify-content:space-around;width:20px;}
@@ -167,7 +198,21 @@
     </div>
     <div class="game-banner">
       <span class="gb-icon">♟</span>
-      <span data-ru="Игра доступна! Ходите по очереди: белые начинают. Нажмите на фигуру, затем на поле куда ходить." data-en="Game available! Take turns: white moves first. Click a piece, then click the destination square.">Игра доступна! Ходите по очереди: белые начинают. Нажмите на фигуру, затем на поле куда ходить.</span>
+      <span data-ru="Игра доступна! Белые начинают. Нажмите на фигуру, затем на поле куда ходить." data-en="Game available! White moves first. Click a piece, then the destination square.">Игра доступна! Белые начинают. Нажмите на фигуру, затем на поле куда ходить.</span>
+    </div>
+    <div class="ai-panel">
+      <div class="ai-mode-row">
+        <span data-ru="Режим:" data-en="Mode:">Режим:</span>
+        <button class="mode-btn active" id="modeHuman8" onclick="setMode('human',8)" data-ru="👥 Вдвоём" data-en="👥 Two Players">👥 Вдвоём</button>
+        <button class="mode-btn" id="modeAI8" onclick="setMode('ai',8)" data-ru="🤖 Против ИИ" data-en="🤖 vs AI">🤖 Против ИИ</button>
+        <a href="chess10_online.html" class="mode-btn" style="text-decoration:none;" data-ru="🌐 Играть онлайн" data-en="🌐 Play Online">🌐 Играть онлайн</a>
+      </div>
+      <div class="ai-level-row" id="aiLevelRow8" style="display:none;">
+        <span data-ru="Уровень ИИ:" data-en="AI Level:">Уровень ИИ:</span>
+        <button class="level-btn active" id="lvl1_8" onclick="setAILevel(1,8)" data-ru="Лёгкий" data-en="Easy">Лёгкий</button>
+        <button class="level-btn" id="lvl2_8" onclick="setAILevel(2,8)" data-ru="Средний" data-en="Medium">Средний</button>
+        <button class="level-btn" id="lvl3_8" onclick="setAILevel(3,8)" data-ru="Сложный" data-en="Hard">Сложный</button>
+      </div>
     </div>
     <div class="game-panel">
       <div class="turn-box">
@@ -181,6 +226,7 @@
       <button class="btn-reset" onclick="resetGame8()" data-ru="🔄 Новая игра" data-en="🔄 New Game">🔄 Новая игра</button>
     </div>
     <div class="status-msg" id="statusMsg8"></div>
+    <div class="ai-thinking" id="aiThinking8"></div>
     <div class="board-container" id="board8"></div>
     <div class="info-box">
       <h3 data-ru="О классических шахматах" data-en="About Classic Chess">О классических шахматах</h3>
@@ -268,6 +314,34 @@
       <span class="gb-icon">♟</span>
       <span data-ru="Игра доступна! Ходите по очереди: белые начинают. Нажмите на фигуру, затем на поле куда ходить." data-en="Game available! Take turns: white moves first. Click a piece, then click the destination square.">Игра доступна! Ходите по очереди: белые начинают. Нажмите на фигуру, затем на поле куда ходить.</span>
     </div>
+    <div class="ai-panel">
+      <div class="ai-mode-row">
+        <span data-ru="Режим:" data-en="Mode:">Режим:</span>
+        <button class="mode-btn active" id="modeHuman12" onclick="setMode('human',12)" data-ru="👥 Вдвоём" data-en="👥 Two Players">👥 Вдвоём</button>
+        <button class="mode-btn" id="modeAI12" onclick="setMode('ai',12)" data-ru="🤖 Против ИИ" data-en="🤖 vs AI">🤖 Против ИИ</button>
+        <a href="chess10_online.html" class="mode-btn" style="text-decoration:none;" data-ru="🌐 Играть онлайн" data-en="🌐 Play Online">🌐 Играть онлайн</a>
+      </div>
+      <div class="ai-level-row" id="aiLevelRow12" style="display:none;">
+        <span data-ru="Уровень ИИ:" data-en="AI Level:">Уровень ИИ:</span>
+        <button class="level-btn active" id="lvl1_12" onclick="setAILevel(1,12)" data-ru="Лёгкий" data-en="Easy">Лёгкий</button>
+        <button class="level-btn" id="lvl2_12" onclick="setAILevel(2,12)" data-ru="Средний" data-en="Medium">Средний</button>
+        <button class="level-btn" id="lvl3_12" onclick="setAILevel(3,12)" data-ru="Сложный" data-en="Hard">Сложный</button>
+      </div>
+    </div>
+    <div class="ai-panel">
+      <div class="ai-mode-row">
+        <span data-ru="Режим:" data-en="Mode:">Режим:</span>
+        <button class="mode-btn active" id="modeHuman12" onclick="setMode('human',12)" data-ru="👥 Вдвоём" data-en="👥 Two Players">👥 Вдвоём</button>
+        <button class="mode-btn" id="modeAI12" onclick="setMode('ai',12)" data-ru="🤖 Против ИИ" data-en="🤖 vs AI">🤖 Против ИИ</button>
+        <a href="chess10_online.html" class="mode-btn" style="text-decoration:none;" data-ru="🌐 Играть онлайн" data-en="🌐 Play Online">🌐 Играть онлайн</a>
+      </div>
+      <div class="ai-level-row" id="aiLevelRow12" style="display:none;">
+        <span data-ru="Уровень ИИ:" data-en="AI Level:">Уровень ИИ:</span>
+        <button class="level-btn active" id="lvl1_12" onclick="setAILevel(1,12)" data-ru="Лёгкий" data-en="Easy">Лёгкий</button>
+        <button class="level-btn" id="lvl2_12" onclick="setAILevel(2,12)" data-ru="Средний" data-en="Medium">Средний</button>
+        <button class="level-btn" id="lvl3_12" onclick="setAILevel(3,12)" data-ru="Сложный" data-en="Hard">Сложный</button>
+      </div>
+    </div>
     <div class="game-panel">
       <div class="turn-box">
         <h4 data-ru="Ход" data-en="Turn">Ход</h4>
@@ -280,6 +354,7 @@
       <button class="btn-reset" onclick="resetGame12()" data-ru="🔄 Новая игра" data-en="🔄 New Game">🔄 Новая игра</button>
     </div>
     <div class="status-msg" id="statusMsg12"></div>
+    <div class="ai-thinking" id="aiThinking12"></div>
     <div class="board-container" id="board12"></div>
     <div class="legend-grid">
       <div class="legend-card">
@@ -319,6 +394,20 @@
       <span class="gb-icon">♟</span>
       <span data-ru="Игра доступна! Ходите по очереди: белые начинают. Нажмите на фигуру, затем на поле куда ходить." data-en="Game available! Take turns: white moves first. Click a piece, then click the destination square.">Игра доступна! Ходите по очереди: белые начинают. Нажмите на фигуру, затем на поле куда ходить.</span>
     </div>
+    <div class="ai-panel">
+      <div class="ai-mode-row">
+        <span data-ru="Режим:" data-en="Mode:">Режим:</span>
+        <button class="mode-btn active" id="modeHuman14" onclick="setMode('human',14)" data-ru="👥 Вдвоём" data-en="👥 Two Players">👥 Вдвоём</button>
+        <button class="mode-btn" id="modeAI14" onclick="setMode('ai',14)" data-ru="🤖 Против ИИ" data-en="🤖 vs AI">🤖 Против ИИ</button>
+        <a href="chess10_online.html" class="mode-btn" style="text-decoration:none;" data-ru="🌐 Играть онлайн" data-en="🌐 Play Online">🌐 Играть онлайн</a>
+      </div>
+      <div class="ai-level-row" id="aiLevelRow14" style="display:none;">
+        <span data-ru="Уровень ИИ:" data-en="AI Level:">Уровень ИИ:</span>
+        <button class="level-btn active" id="lvl1_14" onclick="setAILevel(1,14)" data-ru="Лёгкий" data-en="Easy">Лёгкий</button>
+        <button class="level-btn" id="lvl2_14" onclick="setAILevel(2,14)" data-ru="Средний" data-en="Medium">Средний</button>
+        <button class="level-btn" id="lvl3_14" onclick="setAILevel(3,14)" data-ru="Сложный" data-en="Hard">Сложный</button>
+      </div>
+    </div>
     <div class="game-panel">
       <div class="turn-box">
         <h4 data-ru="Ход" data-en="Turn">Ход</h4>
@@ -331,6 +420,7 @@
       <button class="btn-reset" onclick="resetGame14()" data-ru="🔄 Новая игра" data-en="🔄 New Game">🔄 Новая игра</button>
     </div>
     <div class="status-msg" id="statusMsg14"></div>
+    <div class="ai-thinking" id="aiThinking14"></div>
     <div class="board-container" id="board14"></div>
     <div class="legend-grid">
       <div class="legend-card">
@@ -376,6 +466,20 @@
       <span class="gb-icon">♟</span>
       <span data-ru="Игра доступна! Ходите по очереди: белые начинают. Нажмите на фигуру, затем на поле куда ходить." data-en="Game available! Take turns: white moves first. Click a piece, then click the destination square.">Игра доступна! Ходите по очереди: белые начинают. Нажмите на фигуру, затем на поле куда ходить.</span>
     </div>
+    <div class="ai-panel">
+      <div class="ai-mode-row">
+        <span data-ru="Режим:" data-en="Mode:">Режим:</span>
+        <button class="mode-btn active" id="modeHuman16" onclick="setMode('human',16)" data-ru="👥 Вдвоём" data-en="👥 Two Players">👥 Вдвоём</button>
+        <button class="mode-btn" id="modeAI16" onclick="setMode('ai',16)" data-ru="🤖 Против ИИ" data-en="🤖 vs AI">🤖 Против ИИ</button>
+        <a href="chess10_online.html" class="mode-btn" style="text-decoration:none;" data-ru="🌐 Играть онлайн" data-en="🌐 Play Online">🌐 Играть онлайн</a>
+      </div>
+      <div class="ai-level-row" id="aiLevelRow16" style="display:none;">
+        <span data-ru="Уровень ИИ:" data-en="AI Level:">Уровень ИИ:</span>
+        <button class="level-btn active" id="lvl1_16" onclick="setAILevel(1,16)" data-ru="Лёгкий" data-en="Easy">Лёгкий</button>
+        <button class="level-btn" id="lvl2_16" onclick="setAILevel(2,16)" data-ru="Средний" data-en="Medium">Средний</button>
+        <button class="level-btn" id="lvl3_16" onclick="setAILevel(3,16)" data-ru="Сложный" data-en="Hard">Сложный</button>
+      </div>
+    </div>
     <div class="game-panel">
       <div class="turn-box">
         <h4 data-ru="Ход" data-en="Turn">Ход</h4>
@@ -388,6 +492,7 @@
       <button class="btn-reset" onclick="resetGame16()" data-ru="🔄 Новая игра" data-en="🔄 New Game">🔄 Новая игра</button>
     </div>
     <div class="status-msg" id="statusMsg16"></div>
+    <div class="ai-thinking" id="aiThinking16"></div>
     <div class="board-container" id="board16"></div>
     <div class="legend-grid">
       <div class="legend-card">
@@ -487,11 +592,11 @@ const SETUPS = {
 
 // Состояние игры для каждой доски
 const games = {
-  8:  { board:[], turn:'white', selected:null, moveCount:0, lastMove:null, gameOver:false, noCapture:0 },
-  10: { board:[], turn:'white', selected:null, moveCount:0, lastMove:null, gameOver:false, noCapture:0 },
-  12: { board:[], turn:'white', selected:null, moveCount:0, lastMove:null, gameOver:false, noCapture:0 },
-  14: { board:[], turn:'white', selected:null, moveCount:0, lastMove:null, gameOver:false, noCapture:0 },
-  16: { board:[], turn:'white', selected:null, moveCount:0, lastMove:null, gameOver:false, noCapture:0 },
+  8:  { board:[], turn:'white', selected:null, moveCount:0, lastMove:null, gameOver:false, noCapture:0, aiMode:false, aiLevel:1 },
+  10: { board:[], turn:'white', selected:null, moveCount:0, lastMove:null, gameOver:false, noCapture:0, aiMode:false, aiLevel:1 },
+  12: { board:[], turn:'white', selected:null, moveCount:0, lastMove:null, gameOver:false, noCapture:0, aiMode:false, aiLevel:1 },
+  14: { board:[], turn:'white', selected:null, moveCount:0, lastMove:null, gameOver:false, noCapture:0, aiMode:false, aiLevel:1 },
+  16: { board:[], turn:'white', selected:null, moveCount:0, lastMove:null, gameOver:false, noCapture:0, aiMode:false, aiLevel:1 },
 };
 
 function inBoundsN(r,c,n){ return r>=0&&r<n&&c>=0&&c<n; }
@@ -650,6 +755,9 @@ function hasAnyMove(board,side,n){
 function initGame(n){
   const cfg=SETUPS['b'+n];
   const g=games[n];
+  // Сохраняем режим ИИ
+  const savedAiMode = g.aiMode || false;
+  const savedAiLevel = g.aiLevel || 1;
   g.board=Array.from({length:n},()=>Array(n).fill(null));
   cfg.back.forEach((p,c)=>{
     g.board[0][c]={abbr:p,side:'black'};
@@ -660,6 +768,7 @@ function initGame(n){
     g.board[n-2][c]={abbr:'п',side:'white'};
   }
   g.turn='white'; g.selected=null; g.moveCount=0; g.lastMove=null; g.gameOver=false; g.noCapture=0;
+  g.aiMode=savedAiMode; g.aiLevel=savedAiLevel;
   const logEl=document.getElementById('moveLog'+n);
   const msgEl=document.getElementById('statusMsg'+n);
   if(logEl) logEl.innerHTML='';
@@ -683,9 +792,18 @@ function updateTurnDisplayN(n){
 // ════════════════════════════════════════════════════
 //  РЕНДЕР ИГРОВОЙ ДОСКИ
 // ════════════════════════════════════════════════════
+//  Адаптивный размер клетки
+// ════════════════════════════════════════════════════
+function getAdaptiveSq(n, defaultSq){
+  // Доступная ширина экрана минус отступы и метки
+  const available = Math.min(window.innerWidth, 900) - 48 - 48; // padding + rank labels
+  const maxSq = Math.floor(available / n);
+  return Math.min(defaultSq, Math.max(maxSq, 22)); // минимум 22px
+}
+
 function renderGameBoard(n){
   const cfg=SETUPS['b'+n];
-  const sq=cfg.sq;
+  const sq=getAdaptiveSq(n, cfg.sq); // адаптивный размер
   const g=games[n];
   const cont=document.getElementById('board'+n);
   if(!cont) return;
@@ -831,24 +949,19 @@ function handleClickN(n,r,c){
   updateTurnDisplayN(n);
   renderGameBoard(n);
 
-  // Ход ИИ для 10×10
-  if(n === 10 && aiMode && !g.gameOver && g.turn === 'black'){
-    doAIMove();
+  // Ход ИИ для любой доски
+  if(games[n].aiMode && !games[n].gameOver && games[n].turn === 'black'){
+    doAIMove(n);
   }
 }
 
 function cfg_files(n){ return SETUPS['b'+n].files; }
 
-function resetGame8(){ initGame(8); renderGameBoard(8); }
-function resetGame(){
-  if(aiThinkingTimer) clearTimeout(aiThinkingTimer);
-  const thinkEl = document.getElementById('aiThinking10');
-  if(thinkEl) thinkEl.textContent = '';
-  initGame(10); renderGameBoard(10);
-}
-function resetGame12(){ initGame(12); renderGameBoard(12); }
-function resetGame14(){ initGame(14); renderGameBoard(14); }
-function resetGame16(){ initGame(16); renderGameBoard(16); }
+function resetGame8(){ resetGameN(8); }
+function resetGame(){  resetGameN(10); }
+function resetGame12(){ resetGameN(12); }
+function resetGame14(){ resetGameN(14); }
+function resetGame16(){ resetGameN(16); }
 
 // Старые обёртки для совместимости
 function getMoves(r,c){ return getLegalMoves(games[10].board,r,c,10); }
@@ -1024,23 +1137,54 @@ function makeSVGPiece(abbr,side,sq){
 //  ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ (10×10)
 // ════════════════════════════════════════════════════
 
-let aiMode = false;      // true = играем против ИИ
-let aiLevel = 1;         // 1=лёгкий 2=средний 3=сложный
+let aiMode = false;
+let aiLevel = 1;
 let aiThinkingTimer = null;
+let currentAIBoard = 10; // какая доска сейчас в режиме ИИ
 
-function setMode(mode){
-  aiMode = (mode === 'ai');
-  document.getElementById('modeHuman').classList.toggle('active', !aiMode);
-  document.getElementById('modeAI').classList.toggle('active', aiMode);
-  document.getElementById('aiLevelRow').style.display = aiMode ? 'flex' : 'none';
-  resetGame();
+function setMode(mode, n){
+  n = n || 10;
+  const g = games[n];
+  const isAI = (mode === 'ai');
+
+  // Обновляем кнопки для конкретной доски
+  const modeHuman = document.getElementById('modeHuman'+n);
+  const modeAI    = document.getElementById('modeAI'+n);
+  const levelRow  = document.getElementById('aiLevelRow'+n);
+  if(modeHuman) modeHuman.classList.toggle('active', !isAI);
+  if(modeAI)    modeAI.classList.toggle('active', isAI);
+  if(levelRow)  levelRow.style.display = isAI ? 'flex' : 'none';
+
+  // Сохраняем режим в объект игры
+  g.aiMode  = isAI;
+  g.aiLevel = g.aiLevel || 1;
+  currentAIBoard = n;
+
+  // Глобальные переменные для 10×10 (обратная совместимость)
+  if(n===10){ aiMode=isAI; }
+
+  resetGameN(n);
 }
 
-function setAILevel(level){
-  aiLevel = level;
-  document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('lvl'+level).classList.add('active');
-  resetGame();
+function setAILevel(level, n){
+  n = n || 10;
+  games[n].aiLevel = level;
+  if(n===10) aiLevel = level;
+
+  // Обновляем кнопки уровня для конкретной доски
+  [1,2,3].forEach(l=>{
+    const btn = document.getElementById('lvl'+l+'_'+n);
+    if(btn) btn.classList.toggle('active', l===level);
+  });
+  resetGameN(n);
+}
+
+function resetGameN(n){
+  if(aiThinkingTimer) clearTimeout(aiThinkingTimer);
+  const thinkEl = document.getElementById('aiThinking'+n);
+  if(thinkEl) thinkEl.textContent='';
+  initGame(n);
+  renderGameBoard(n);
 }
 
 // Оценка фигуры
@@ -1171,40 +1315,39 @@ function getAIMove(board, side, n, level){
   return best;
 }
 
-// Ход ИИ
-function doAIMove(){
-  const g = games[10];
-  if(g.gameOver || g.turn !== 'black' || !aiMode) return;
+// Ход ИИ — универсальный для всех досок
+function doAIMove(n){
+  const g = games[n];
+  if(!g || g.gameOver || g.turn !== 'black' || !g.aiMode) return;
 
-  const thinkEl = document.getElementById('aiThinking10');
+  const thinkEl = document.getElementById('aiThinking'+n);
   if(thinkEl) thinkEl.textContent = LANG==='ru' ? '🤖 ИИ думает...' : '🤖 AI thinking...';
 
   aiThinkingTimer = setTimeout(()=>{
     try {
-      const move = getAIMove(g.board, 'black', 10, aiLevel);
+      const level = g.aiLevel || 1;
+      const move = getAIMove(g.board, 'black', n, level);
       if(thinkEl) thinkEl.textContent = '';
       if(move){
-        // Применяем ход напрямую без handleClickN чтобы избежать блокировки
         const moving = g.board[move.fr][move.fc];
         const captured = g.board[move.tr][move.tc];
         g.board[move.tr][move.tc] = moving;
         g.board[move.fr][move.fc] = null;
 
-        // Счётчик ничьей
         if(captured || moving.abbr==='п') g.noCapture=0; else g.noCapture++;
 
         // Превращение пешки
-        if(moving.abbr==='п' && move.tr===9)
+        if(moving.abbr==='п' && move.tr===n-1)
           g.board[move.tr][move.tc]={abbr:'Ф',side:'black'};
 
         g.lastMove={fr:move.fr,fc:move.fc,tr:move.tr,tc:move.tc};
         g.moveCount++;
 
         // Запись хода в лог
-        const files=SETUPS['b10'].files;
+        const files=SETUPS['b'+n].files;
         const capSym=captured?'×':'';
-        const moveStr=`${files[move.fc]}${10-move.fr}→${files[move.tc]}${10-move.tr}${capSym}`;
-        const logEl=document.getElementById('moveLog10');
+        const moveStr=`${files[move.fc]}${n-move.fr}→${files[move.tc]}${n-move.tr}${capSym}`;
+        const logEl=document.getElementById('moveLog'+n);
         if(logEl){
           const entry=document.createElement('div');
           entry.className='move-entry';
@@ -1218,10 +1361,10 @@ function doAIMove(){
         g.turn='white';
 
         // Проверка мата/пата
-        const msgEl=document.getElementById('statusMsg10');
-        const nextKing=findKing(g.board,'white',10);
-        const inCheck=nextKing&&isAttacked(g.board,nextKing.r,nextKing.c,'black',10);
-        const hasMoves=hasAnyMove(g.board,'white',10);
+        const msgEl=document.getElementById('statusMsg'+n);
+        const nextKing=findKing(g.board,'white',n);
+        const inCheck=nextKing&&isAttacked(g.board,nextKing.r,nextKing.c,'black',n);
+        const hasMoves=hasAnyMove(g.board,'white',n);
 
         if(!hasMoves){
           g.gameOver=true;
@@ -1241,14 +1384,14 @@ function doAIMove(){
           msgEl.textContent=''; msgEl.className='status-msg';
         }
 
-        updateTurnDisplayN(10);
-        renderGameBoard(10);
+        updateTurnDisplayN(n);
+        renderGameBoard(n);
       }
     } catch(e) {
       if(thinkEl) thinkEl.textContent = '';
       console.error('AI error:', e);
     }
-  }, aiLevel === 3 ? 600 : 300);
+  }, (g.aiLevel||1) === 3 ? 600 : 300);
 }
 
 // ════════════════════════════════════════════════════
@@ -1305,6 +1448,11 @@ initGame(12); renderGameBoard(12);
 initGame(14); renderGameBoard(14);
 initGame(16); renderGameBoard(16);
 addSaveButtons();
+
+// Перерисовка при изменении размера экрана (поворот смартфона)
+window.addEventListener('resize', ()=>{
+  [8,10,12,14,16].forEach(n=>renderGameBoard(n));
+});
 
 // Автопереход на нужную доску по якорю в URL (например chess.html#b12)
 (function(){
