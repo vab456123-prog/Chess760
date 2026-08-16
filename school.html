@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Школа программирования с ИИ — учим HTML, CSS, JavaScript, Firebase и GitHub на реальных проектах. ИИ объясняет, проверяет код и помогает. Бесплатно для всех возрастов!">
+  <meta name="keywords" content="школа программирования, учить HTML, учить CSS, учить JavaScript, Firebase, GitHub, программирование с ИИ, бесплатное программирование, DIY сборка ПК, coding school">
+  <meta name="author" content="AI Coding School">
+  <meta property="og:title" content="Школа программирования с ИИ — HTML, CSS, JavaScript, Firebase">
+  <meta property="og:description" content="Учитесь программировать с ИИ на реальных проектах. Бесплатно, для всех возрастов, без регистрации.">
+  <meta property="og:url" content="https://vab456123-prog.github.io/Chess760/school.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Школа программирования с ИИ">
+  <meta name="twitter:description" content="HTML, CSS, JavaScript, Firebase, GitHub — учимся с ИИ на реальных проектах. Бесплатно!">
+  <link rel="canonical" href="https://vab456123-prog.github.io/Chess760/school.html">
+  <title>Школа программирования с ИИ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0f4ff;
+      --surface: #ffffff;
+      --surface2: #e8eeff;
+      --blue: #3b5ccc;
+      --blue-light: #eef2ff;
+      --blue-dark: #1e3a8a;
+      --green: #16a34a;
+      --green-light: #dcfce7;
+      --orange: #ea580c;
+      --orange-light: #fff7ed;
+      --purple: #7c3aed;
+      --purple-light: #f5f3ff;
+      --text: #172033;
+      --text-dim: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 8px 32px rgba(59,92,204,0.10);
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; font-size:16px; line-height:1.6; min-height:100vh; }
+
+    /* Шапка */
+    header { background:var(--surface); border-bottom:1px solid var(--border); padding:0 6%; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(59,92,204,0.08); }
+    .header-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; height:64px; }
+    .logo { font-family:'Playfair Display',serif; font-size:20px; font-weight:900; color:var(--blue-dark); display:flex; align-items:center; gap:10px; }
+    .logo-icon { font-size:28px; }
+    nav { display:flex; gap:6px; }
+    .nav-btn { background:none; border:none; padding:8px 16px; border-radius:10px; font-size:14px; font-weight:600; color:var(--text-dim); cursor:pointer; transition:all 0.2s; }
+    .nav-btn:hover { background:var(--blue-light); color:var(--blue); }
+    .nav-btn.active { background:var(--blue); color:#fff; }
+    .lang-toggle { display:flex; gap:4px; border:1px solid var(--border); border-radius:10px; padding:3px; }
+    .lang-btn { background:none; border:none; padding:5px 12px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; color:var(--text-dim); transition:all 0.2s; }
+    .lang-btn.active { background:var(--blue); color:#fff; }
+
+    .page-wrap { max-width:1100px; margin:0 auto; padding:0 24px 80px; }
+
+    /* Герой */
+    .hero { text-align:center; padding:64px 0 48px; }
+    .hero-badge { display:inline-block; background:var(--blue-light); color:var(--blue); border:1px solid rgba(59,92,204,0.2); padding:6px 18px; border-radius:999px; font-size:13px; font-weight:700; letter-spacing:0.05em; margin-bottom:20px; }
+    .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(28px,5vw,54px); font-weight:900; color:var(--blue-dark); line-height:1.15; margin-bottom:16px; }
+    .hero h1 span { color:var(--blue); }
+    .hero p { font-size:18px; color:var(--text-dim); max-width:620px; margin:0 auto 32px; line-height:1.65; }
+    .hero-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    .btn-primary { background:var(--blue); color:#fff; border:none; padding:14px 32px; border-radius:14px; font-size:16px; font-weight:700; cursor:pointer; transition:all 0.2s; box-shadow:0 4px 16px rgba(59,92,204,0.3); }
+    .btn-primary:hover { background:var(--blue-dark); transform:translateY(-2px); box-shadow:0 8px 24px rgba(59,92,204,0.35); }
+    .btn-secondary { background:var(--surface); color:var(--blue); border:2px solid var(--blue); padding:14px 32px; border-radius:14px; font-size:16px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+    .btn-secondary:hover { background:var(--blue-light); transform:translateY(-2px); }
+
+    /* Карточки языков */
+    .section-title { font-family:'Playfair Display',serif; font-size:28px; font-weight:900; color:var(--blue-dark); margin-bottom:8px; }
+    .section-sub { color:var(--text-dim); font-size:16px; margin-bottom:32px; }
+    .langs-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin-bottom:48px; }
+    .lang-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:24px; box-shadow:var(--shadow); transition:all 0.22s; cursor:pointer; }
+    .lang-card:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(59,92,204,0.15); }
+    .lang-card.html { border-top:4px solid #e44d26; }
+    .lang-card.css  { border-top:4px solid #264de4; }
+    .lang-card.js   { border-top:4px solid #f7df1e; }
+    .lang-card.firebase { border-top:4px solid #f5820d; }
+    .lang-card.github   { border-top:4px solid #24292e; }
+    .lang-card.diy      { border-top:4px solid #7c3aed; }
+    .lang-icon { font-size:40px; margin-bottom:12px; }
+    .lang-name { font-size:20px; font-weight:800; color:var(--text); margin-bottom:4px; }
+    .lang-desc { font-size:14px; color:var(--text-dim); line-height:1.5; margin-bottom:12px; }
+    .lang-lessons { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--blue); font-weight:600; }
+    .lang-level { display:inline-block; padding:3px 10px; border-radius:999px; font-size:12px; font-weight:700; }
+    .level-begin { background:var(--green-light); color:var(--green); }
+    .level-mid   { background:var(--orange-light); color:var(--orange); }
+    .level-adv   { background:var(--purple-light); color:var(--purple); }
+
+    /* Как работает ИИ */
+    .ai-section { background:var(--surface); border:1px solid var(--border); border-radius:24px; padding:36px; margin-bottom:48px; box-shadow:var(--shadow); }
+    .ai-features { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-top:24px; }
+    .ai-feat { background:var(--blue-light); border-radius:16px; padding:20px; text-align:center; }
+    .ai-feat-icon { font-size:32px; margin-bottom:8px; }
+    .ai-feat-title { font-size:15px; font-weight:700; color:var(--blue-dark); margin-bottom:4px; }
+    .ai-feat-desc { font-size:13px; color:var(--text-dim); line-height:1.5; }
+
+    /* Проекты */
+    .projects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-bottom:48px; }
+    .project-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:24px; box-shadow:var(--shadow); }
+    .project-tag { display:inline-block; padding:3px 10px; border-radius:999px; font-size:12px; font-weight:700; margin-bottom:12px; }
+    .tag-chess { background:#dcfce7; color:#15803d; }
+    .tag-english { background:#fef3c7; color:#b45309; }
+    .tag-school { background:var(--blue-light); color:var(--blue); }
+    .project-title { font-size:18px; font-weight:800; color:var(--text); margin-bottom:6px; }
+    .project-desc { font-size:14px; color:var(--text-dim); line-height:1.5; margin-bottom:14px; }
+    .project-techs { display:flex; flex-wrap:wrap; gap:6px; }
+    .tech-chip { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:3px 10px; font-size:12px; font-weight:600; color:var(--text-dim); }
+
+    /* Путь обучения */
+    .path-section { background:var(--surface); border:1px solid var(--border); border-radius:24px; padding:36px; margin-bottom:48px; box-shadow:var(--shadow); }
+    .path-steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-top:24px; }
+    .path-step { background:var(--blue-light); border-radius:16px; padding:18px; text-align:center; position:relative; }
+    .path-step-num { width:32px; height:32px; background:var(--blue); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; margin:0 auto 10px; }
+    .path-step-title { font-size:14px; font-weight:700; color:var(--blue-dark); margin-bottom:4px; }
+    .path-step-desc { font-size:12px; color:var(--text-dim); line-height:1.4; }
+
+    /* Демо урок */
+    .demo-section { background:linear-gradient(135deg,var(--blue-dark),var(--blue)); border-radius:24px; padding:36px; margin-bottom:48px; color:#fff; }
+    .demo-section h2 { font-family:'Playfair Display',serif; font-size:24px; font-weight:900; margin-bottom:8px; }
+    .demo-section p { opacity:0.85; margin-bottom:24px; font-size:15px; }
+    .demo-chat { background:rgba(255,255,255,0.1); border-radius:16px; padding:20px; margin-bottom:20px; }
+    .chat-msg { display:flex; gap:10px; margin-bottom:14px; }
+    .chat-msg:last-child { margin-bottom:0; }
+    .chat-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+    .avatar-ai { background:var(--blue-light); }
+    .avatar-student { background:rgba(255,255,255,0.2); }
+    .chat-bubble { background:rgba(255,255,255,0.15); border-radius:12px; padding:10px 14px; font-size:14px; line-height:1.5; max-width:85%; }
+    .chat-bubble.ai { background:rgba(255,255,255,0.95); color:var(--text); }
+    .chat-bubble code { background:rgba(59,92,204,0.15); padding:2px 6px; border-radius:4px; font-family:monospace; font-size:13px; color:var(--blue-dark); }
+    .demo-input { display:flex; gap:8px; }
+    .demo-input input { flex:1; padding:12px 16px; border-radius:12px; border:none; background:rgba(255,255,255,0.15); color:#fff; font-size:14px; outline:none; }
+    .demo-input input::placeholder { color:rgba(255,255,255,0.5); }
+    .demo-input input:focus { background:rgba(255,255,255,0.25); }
+    .btn-send { background:#fff; color:var(--blue); border:none; padding:12px 20px; border-radius:12px; font-weight:700; cursor:pointer; font-size:14px; transition:all 0.2s; }
+    .btn-send:hover { background:var(--blue-light); }
+
+    /* Подвал */
+    footer { text-align:center; padding:28px 0; border-top:1px solid var(--border); color:var(--text-dim); font-size:14px; }
+    footer a { color:var(--blue); text-decoration:none; }
+
+    @media(max-width:600px) {
+      .hero { padding:40px 0 32px; }
+      .ai-section, .path-section, .demo-section { padding:20px; }
+      nav { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Шапка -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">💻</span>
+      <span data-ru="Школа программирования" data-en="Coding School">Школа программирования</span>
+    </div>
+    <nav>
+      <button class="nav-btn active" onclick="showSection('courses')" data-ru="Курсы" data-en="Courses">Курсы</button>
+      <button class="nav-btn" onclick="showSection('projects')" data-ru="Проекты" data-en="Projects">Проекты</button>
+      <button class="nav-btn" onclick="showSection('demo')" data-ru="Демо-урок" data-en="Demo Lesson">Демо-урок</button>
+    </nav>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('ru',this)">RU</button>
+      <button class="lang-btn" onclick="setLang('en',this)">EN</button>
+    </div>
+  </div>
+</header>
+
+<div class="page-wrap">
+
+  <!-- Герой -->
+  <section class="hero">
+    <div class="hero-badge" data-ru="🤖 Учимся с ИИ — бесплатно" data-en="🤖 Learn with AI — for free">🤖 Учимся с ИИ — бесплатно</div>
+    <h1 data-ru="Программируй. <span>Создавай.</span> Учись с ИИ." data-en="Code. <span>Create.</span> Learn with AI.">Программируй. <span>Создавай.</span> Учись с ИИ.</h1>
+    <p data-ru="Учимся HTML, CSS, JavaScript и Firebase на реальных проектах. ИИ объясняет, проверяет код и помогает на каждом шаге." data-en="Learn HTML, CSS, JavaScript and Firebase through real projects. AI explains, reviews code and helps at every step.">Учимся HTML, CSS, JavaScript и Firebase на реальных проектах. ИИ объясняет, проверяет код и помогает на каждом шаге.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('courses-section').scrollIntoView({behavior:'smooth'})" data-ru="🚀 Начать обучение" data-en="🚀 Start Learning">🚀 Начать обучение</button>
+      <button class="btn-secondary" onclick="document.getElementById('demo-section').scrollIntoView({behavior:'smooth'})" data-ru="👀 Посмотреть демо" data-en="👀 See Demo">👀 Посмотреть демо</button>
+    </div>
+  </section>
+
+  <!-- Курсы -->
+  <section id="courses-section">
+    <div class="section-title" data-ru="Языки программирования" data-en="Programming Languages">Языки программирования</div>
+    <div class="section-sub" data-ru="Начинаем с основ и сразу применяем в реальных проектах" data-en="Start with basics and immediately apply in real projects">Начинаем с основ и сразу применяем в реальных проектах</div>
+    <div class="langs-grid">
+      <div class="lang-card html">
+        <div class="lang-icon">🌐</div>
+        <div class="lang-name">HTML</div>
+        <div class="lang-desc" data-ru="Основа всех веб-страниц. Создаём структуру сайтов, изучаем теги и атрибуты." data-en="Foundation of all web pages. We create site structures, learn tags and attributes.">Основа всех веб-страниц. Создаём структуру сайтов, изучаем теги и атрибуты.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="lang-lessons">📚 <span data-ru="10 уроков" data-en="10 lessons">10 уроков</span></span>
+          <span class="lang-level level-begin" data-ru="Начальный" data-en="Beginner">Начальный</span>
+        </div>
+      </div>
+      <div class="lang-card css">
+        <div class="lang-icon">🎨</div>
+        <div class="lang-name">CSS</div>
+        <div class="lang-desc" data-ru="Делаем сайты красивыми. Цвета, шрифты, анимации и адаптивный дизайн." data-en="Make websites beautiful. Colors, fonts, animations and responsive design.">Делаем сайты красивыми. Цвета, шрифты, анимации и адаптивный дизайн.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="lang-lessons">📚 <span data-ru="12 уроков" data-en="12 lessons">12 уроков</span></span>
+          <span class="lang-level level-begin" data-ru="Начальный" data-en="Beginner">Начальный</span>
+        </div>
+      </div>
+      <div class="lang-card js">
+        <div class="lang-icon">⚡</div>
+        <div class="lang-name">JavaScript</div>
+        <div class="lang-desc" data-ru="Добавляем логику и интерактивность. Игры, ИИ, анимации — всё это JS." data-en="Add logic and interactivity. Games, AI, animations — it's all JS.">Добавляем логику и интерактивность. Игры, ИИ, анимации — всё это JS.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="lang-lessons">📚 <span data-ru="20 уроков" data-en="20 lessons">20 уроков</span></span>
+          <span class="lang-level level-mid" data-ru="Средний" data-en="Intermediate">Средний</span>
+        </div>
+      </div>
+      <div class="lang-card firebase">
+        <div class="lang-icon">🔥</div>
+        <div class="lang-name">Firebase</div>
+        <div class="lang-desc" data-ru="База данных онлайн. Онлайн-игры, синхронизация между устройствами." data-en="Online database. Online games, synchronization between devices.">База данных онлайн. Онлайн-игры, синхронизация между устройствами.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="lang-lessons">📚 <span data-ru="8 уроков" data-en="8 lessons">8 уроков</span></span>
+          <span class="lang-level level-adv" data-ru="Продвинутый" data-en="Advanced">Продвинутый</span>
+        </div>
+      </div>
+      <div class="lang-card github">
+        <div class="lang-icon">🐙</div>
+        <div class="lang-name">GitHub</div>
+        <div class="lang-desc" data-ru="Сохраняем и публикуем проекты. Командная работа, версии кода, бесплатный хостинг GitHub Pages." data-en="Save and publish projects. Teamwork, code versions, free GitHub Pages hosting.">Сохраняем и публикуем проекты. Командная работа, версии кода, бесплатный хостинг GitHub Pages.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="lang-lessons">📚 <span data-ru="6 уроков" data-en="6 lessons">6 уроков</span></span>
+          <span class="lang-level level-mid" data-ru="Средний" data-en="Intermediate">Средний</span>
+        </div>
+      </div>
+      <div class="lang-card diy">
+        <div class="lang-icon">🖥️</div>
+        <div class="lang-name" data-ru="DIY сборка ПК" data-en="DIY PC Build">DIY сборка ПК</div>
+        <div class="lang-desc" data-ru="Собираем компьютер с помощью ИИ. Выбор комплектующих, совместимость, установка, настройка." data-en="Build a computer with AI help. Choosing components, compatibility, installation, setup.">Собираем компьютер с помощью ИИ. Выбор комплектующих, совместимость, установка, настройка.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="lang-lessons">📚 <span data-ru="10 уроков" data-en="10 lessons">10 уроков</span></span>
+          <span class="lang-level level-begin" data-ru="Начальный" data-en="Beginner">Начальный</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Как работает ИИ -->
+  <div class="ai-section">
+    <div class="section-title" data-ru="Как помогает ИИ" data-en="How AI helps">Как помогает ИИ</div>
+    <div class="section-sub" data-ru="ИИ — ваш персональный преподаватель, наставник и проверяющий" data-en="AI is your personal teacher, mentor and reviewer">ИИ — ваш персональный преподаватель, наставник и проверяющий</div>
+    <div class="ai-features">
+      <div class="ai-feat">
+        <div class="ai-feat-icon">📖</div>
+        <div class="ai-feat-title" data-ru="Объясняет теорию" data-en="Explains theory">Объясняет теорию</div>
+        <div class="ai-feat-desc" data-ru="Простым языком, с примерами и аналогиями. Можно спрашивать сколько угодно раз." data-en="In simple language, with examples and analogies. Ask as many times as you need.">Простым языком, с примерами и аналогиями. Можно спрашивать сколько угодно раз.</div>
+      </div>
+      <div class="ai-feat">
+        <div class="ai-feat-icon">🔍</div>
+        <div class="ai-feat-title" data-ru="Проверяет код" data-en="Reviews code">Проверяет код</div>
+        <div class="ai-feat-desc" data-ru="Находит ошибки, объясняет почему они возникли и как исправить." data-en="Finds errors, explains why they occurred and how to fix them.">Находит ошибки, объясняет почему они возникли и как исправить.</div>
+      </div>
+      <div class="ai-feat">
+        <div class="ai-feat-icon">✏️</div>
+        <div class="ai-feat-title" data-ru="Даёт задания" data-en="Gives assignments">Даёт задания</div>
+        <div class="ai-feat-desc" data-ru="Задания подобраны по уровню. Решил — получаешь следующее, сложнее." data-en="Tasks are matched to your level. Solved one — get the next, harder one.">Задания подобраны по уровню. Решил — получаешь следующее, сложнее.</div>
+      </div>
+      <div class="ai-feat">
+        <div class="ai-feat-icon">💡</div>
+        <div class="ai-feat-title" data-ru="Даёт подсказки" data-en="Gives hints">Даёт подсказки</div>
+        <div class="ai-feat-desc" data-ru="Если застрял — ИИ не даст готовый ответ, но поможет прийти к нему самому." data-en="If you're stuck — AI won't give the answer, but will help you find it yourself.">Если застрял — ИИ не даст готовый ответ, но поможет прийти к нему самому.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Реальные проекты -->
+  <section id="projects-section">
+    <div class="section-title" data-ru="Реальные проекты" data-en="Real Projects">Реальные проекты</div>
+    <div class="section-sub" data-ru="Учимся создавая настоящие работающие сайты" data-en="We learn by creating real working websites">Учимся создавая настоящие работающие сайты</div>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-tag tag-chess">♟ Проект 1</div>
+        <div class="project-title">Chess760</div>
+        <div class="project-desc" data-ru="Шахматы на досках 8×8 до 16×16 с ИИ-противником и онлайн-игрой через Firebase." data-en="Chess on boards 8×8 to 16×16 with AI opponent and online play via Firebase.">Шахматы на досках 8×8 до 16×16 с ИИ-противником и онлайн-игрой через Firebase.</div>
+        <div class="project-techs">
+          <span class="tech-chip">HTML</span>
+          <span class="tech-chip">CSS</span>
+          <span class="tech-chip">JavaScript</span>
+          <span class="tech-chip">Firebase</span>
+          <span class="tech-chip">SVG</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-tag tag-english">🇬🇧 Проект 2</div>
+        <div class="project-title">English School</div>
+        <div class="project-desc" data-ru="Интерактивная школа английского с AI-преподавателем, карточками слов и диалогами." data-en="Interactive English school with AI teacher, word cards and dialogues.">Интерактивная школа английского с AI-преподавателем, карточками слов и диалогами.</div>
+        <div class="project-techs">
+          <span class="tech-chip">HTML</span>
+          <span class="tech-chip">CSS</span>
+          <span class="tech-chip">JavaScript</span>
+          <span class="tech-chip">Claude API</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-tag tag-school">💻 Проект 3</div>
+        <div class="project-title" data-ru="Школа программирования" data-en="Coding School">Школа программирования</div>
+        <div class="project-desc" data-ru="Этот сайт! Создаём его сами, изучая HTML, CSS и JS на практике." data-en="This website! We create it ourselves, learning HTML, CSS and JS in practice.">Этот сайт! Создаём его сами, изучая HTML, CSS и JS на практике.</div>
+        <div class="project-techs">
+          <span class="tech-chip">HTML</span>
+          <span class="tech-chip">CSS</span>
+          <span class="tech-chip">JavaScript</span>
+          <span class="tech-chip">Claude API</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-tag" style="background:#f0f0f0;color:#24292e;">🐙 Проект 4</div>
+        <div class="project-title">GitHub Pages</div>
+        <div class="project-desc" data-ru="Публикуем все наши проекты на GitHub. Учимся работать с репозиториями и бесплатным хостингом." data-en="Publish all our projects on GitHub. Learn to work with repositories and free hosting.">Публикуем все наши проекты на GitHub. Учимся работать с репозиториями и бесплатным хостингом.</div>
+        <div class="project-techs">
+          <span class="tech-chip">Git</span>
+          <span class="tech-chip">GitHub</span>
+          <span class="tech-chip">GitHub Pages</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-tag" style="background:var(--purple-light);color:var(--purple);">🖥️ Проект 5</div>
+        <div class="project-title" data-ru="DIY Сборка ПК с ИИ" data-en="DIY PC Build with AI">DIY Сборка ПК с ИИ</div>
+        <div class="project-desc" data-ru="ИИ помогает выбрать комплектующие по бюджету, проверяет совместимость и объясняет как собрать компьютер шаг за шагом." data-en="AI helps choose components by budget, checks compatibility and explains how to build a computer step by step.">ИИ помогает выбрать комплектующие по бюджету, проверяет совместимость и объясняет как собрать компьютер шаг за шагом.</div>
+        <div class="project-techs">
+          <span class="tech-chip">HTML</span>
+          <span class="tech-chip">CSS</span>
+          <span class="tech-chip">JavaScript</span>
+          <span class="tech-chip">Claude API</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Путь обучения -->
+  <div class="path-section">
+    <div class="section-title" data-ru="Путь обучения" data-en="Learning Path">Путь обучения</div>
+    <div class="section-sub" data-ru="Пошагово от нуля до создания реальных проектов" data-en="Step by step from zero to creating real projects">Пошагово от нуля до создания реальных проектов</div>
+    <div class="path-steps">
+      <div class="path-step">
+        <div class="path-step-num">1</div>
+        <div class="path-step-title" data-ru="Основы HTML" data-en="HTML Basics">Основы HTML</div>
+        <div class="path-step-desc" data-ru="Теги, структура, первая страница" data-en="Tags, structure, first page">Теги, структура, первая страница</div>
+      </div>
+      <div class="path-step">
+        <div class="path-step-num">2</div>
+        <div class="path-step-title" data-ru="Стили CSS" data-en="CSS Styles">Стили CSS</div>
+        <div class="path-step-desc" data-ru="Цвета, шрифты, макеты, адаптив" data-en="Colors, fonts, layouts, responsive">Цвета, шрифты, макеты, адаптив</div>
+      </div>
+      <div class="path-step">
+        <div class="path-step-num">3</div>
+        <div class="path-step-title" data-ru="JavaScript" data-en="JavaScript">JavaScript</div>
+        <div class="path-step-desc" data-ru="Логика, функции, события, DOM" data-en="Logic, functions, events, DOM">Логика, функции, события, DOM</div>
+      </div>
+      <div class="path-step">
+        <div class="path-step-num">4</div>
+        <div class="path-step-title" data-ru="Firebase" data-en="Firebase">Firebase</div>
+        <div class="path-step-desc" data-ru="База данных, онлайн-игры" data-en="Database, online games">База данных, онлайн-игры</div>
+      </div>
+      <div class="path-step">
+        <div class="path-step-num">5</div>
+        <div class="path-step-title" data-ru="ИИ в проектах" data-en="AI in Projects">ИИ в проектах</div>
+        <div class="path-step-desc" data-ru="Claude API, чат-боты, умные функции" data-en="Claude API, chatbots, smart features">Claude API, чат-боты, умные функции</div>
+      </div>
+      <div class="path-step">
+        <div class="path-step-num">6</div>
+        <div class="path-step-title" data-ru="GitHub" data-en="GitHub">GitHub</div>
+        <div class="path-step-desc" data-ru="Репозитории, публикация, командная работа" data-en="Repositories, publishing, teamwork">Репозитории, публикация, командная работа</div>
+      </div>
+      <div class="path-step">
+        <div class="path-step-num">7</div>
+        <div class="path-step-title" data-ru="DIY Сборка ПК" data-en="DIY PC Build">DIY Сборка ПК</div>
+        <div class="path-step-desc" data-ru="Комплектующие, совместимость, сборка с ИИ" data-en="Components, compatibility, AI-assisted build">Комплектующие, совместимость, сборка с ИИ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Демо-урок -->
+  <section id="demo-section">
+    <div class="demo-section">
+      <h2 data-ru="🤖 Демо-урок: первый тег HTML" data-en="🤖 Demo Lesson: First HTML Tag">🤖 Демо-урок: первый тег HTML</h2>
+      <p data-ru="Поговорите с ИИ-преподавателем прямо сейчас. Задайте любой вопрос о программировании!" data-en="Talk to the AI teacher right now. Ask any question about programming!">Поговорите с ИИ-преподавателем прямо сейчас. Задайте любой вопрос о программировании!</p>
+      <div class="demo-chat" id="chatBox">
+        <div class="chat-msg">
+          <div class="chat-avatar avatar-ai">🤖</div>
+          <div class="chat-bubble ai" data-ru="Привет! Я ваш ИИ-преподаватель. Сегодня мы начнём с самого начала — с HTML. Знаете что такое тег? Например <code>&lt;h1&gt;</code> — это заголовок страницы. Попробуйте спросить меня что-нибудь!" data-en="Hello! I'm your AI teacher. Today we'll start from the very beginning — HTML. Do you know what a tag is? For example <code>&lt;h1&gt;</code> is a page heading. Try asking me something!">Привет! Я ваш ИИ-преподаватель. Сегодня мы начнём с самого начала — с HTML. Знаете что такое тег? Например <code>&lt;h1&gt;</code> — это заголовок страницы. Попробуйте спросить меня что-нибудь!</div>
+        </div>
+      </div>
+      <div class="demo-input">
+        <input type="text" id="chatInput" placeholder="Задайте вопрос о программировании..." onkeydown="if(event.key==='Enter')sendMsg()">
+        <button class="btn-send" onclick="sendMsg()">→</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="version-tag" style="text-align:center;color:var(--text-dim);font-size:13px;font-style:italic;margin-bottom:14px;" data-ru="Версия: август 2026" data-en="Version: August 2026">Версия: август 2026</div>
+
+</div>
+
+<footer>
+  <a href="index.html" data-ru="← На главную Chess760" data-en="← Chess760 Home">← На главную Chess760</a>
+  &nbsp;·&nbsp;
+  <span data-ru="Школа программирования с ИИ" data-en="AI Coding School">Школа программирования с ИИ</span>
+</footer>
+
+<script>
+// ════════════════════════════════
+//  ЯЗЫК
+// ════════════════════════════════
+let LANG = 'ru';
+function setLang(lang, btn){
+  LANG = lang;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('[data-ru]').forEach(el=>{
+    const val = el.dataset[lang];
+    if(val){
+      if(val.includes('<')) el.innerHTML = val;
+      else el.textContent = val;
+    }
+  });
+  // Обновляем плейсхолдер
+  document.getElementById('chatInput').placeholder =
+    lang==='ru' ? 'Задайте вопрос о программировании...' : 'Ask a question about programming...';
+}
+
+// ════════════════════════════════
+//  НАВИГАЦИЯ
+// ════════════════════════════════
+function showSection(name){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  const targets = {
+    courses: 'courses-section',
+    projects: 'projects-section',
+    demo: 'demo-section'
+  };
+  document.getElementById(targets[name])?.scrollIntoView({behavior:'smooth'});
+}
+
+// ════════════════════════════════
+//  ИИ ЧАТ (через Claude API)
+// ════════════════════════════════
+const SYSTEM_PROMPT = `Ты дружелюбный преподаватель для "Школы программирования с ИИ". 
+Ты обучаешь: HTML, CSS, JavaScript, Firebase, GitHub и помогаешь собирать ПК (DIY PC Build).
+Объясняй простым языком, используй примеры кода в тегах <code>.
+Давай короткие чёткие ответы (2-4 предложения). 
+Если ученик делает ошибку — мягко поправь. 
+По теме сборки ПК — помогай выбрать комплектующие, проверяй совместимость, объясняй шаги сборки.
+Отвечай на том языке на котором спрашивают.`;
+
+let chatHistory = [];
+
+async function sendMsg(){
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+
+  // Добавляем сообщение ученика
+  addMsg(text, 'student');
+  chatHistory.push({role:'user', content:text});
+
+  // Показываем что ИИ думает
+  const thinkId = 'think_'+Date.now();
+  addMsg(LANG==='ru'?'⏳ ИИ думает...':'⏳ AI thinking...', 'ai', thinkId);
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        system:SYSTEM_PROMPT,
+        messages:chatHistory
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || (LANG==='ru'?'Ошибка соединения':'Connection error');
+
+    // Убираем "думает" и добавляем ответ
+    document.getElementById(thinkId)?.remove();
+    addMsg(reply, 'ai');
+    chatHistory.push({role:'assistant', content:reply});
+
+    // Ограничиваем историю до 10 сообщений
+    if(chatHistory.length > 10) chatHistory = chatHistory.slice(-10);
+
+  } catch(e) {
+    document.getElementById(thinkId)?.remove();
+    addMsg(LANG==='ru'?'Ошибка соединения с ИИ. Попробуйте позже.':'Connection error. Please try again later.', 'ai');
+  }
+}
+
+function addMsg(text, who, id){
+  const box = document.getElementById('chatBox');
+  const div = document.createElement('div');
+  div.className = 'chat-msg';
+  if(id) div.id = id;
+  div.innerHTML = `
+    <div class="chat-avatar ${who==='ai'?'avatar-ai':'avatar-student'}">${who==='ai'?'🤖':'👤'}</div>
+    <div class="chat-bubble ${who==='ai'?'ai':''}">${text}</div>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+</script>
+</body>
+</html>

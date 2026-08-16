@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Chess760 Онлайн — играйте в шахматы с другом через интернет. Доски 8×8, 10×10, 12×12, 14×14, 16×16. Создайте партию и отправьте код другу. Бесплатно!">
+  <meta name="keywords" content="шахматы онлайн, chess online, Chess760 онлайн, играть в шахматы онлайн бесплатно, шахматы с другом, онлайн шахматы">
+  <meta name="author" content="Chess760">
+  <meta property="og:title" content="Chess760 Онлайн — играйте с другом через интернет">
+  <meta property="og:description" content="Онлайн-шахматы на досках от 8×8 до 16×16. Создайте партию и поделитесь кодом с другом. Бесплатно!">
+  <meta property="og:url" content="https://vab456123-prog.github.io/Chess760/chess_online.html">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://vab456123-prog.github.io/Chess760/chess_online.html">
+  <title>Chess760 — Онлайн</title>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-624E2Z61XF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-624E2Z61XF');
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <style>
+    :root {
+      --bg:#e8f5e9; --surface:#ffffff; --surface2:#f1f8f2;
+      --gold:#7b5e2a; --gold-light:#5a4010; --gold-dim:#a08040;
+      --light-sq:#eedca0; --dark-sq:#7a5230;
+      --text:#1a2e1a; --text-dim:#4a6e4a; --border:#b2d8b2;
+      --green:#2e7d32;
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--bg);color:var(--text);font-family:'EB Garamond',Georgia,serif;font-size:17px;line-height:1.7;min-height:100vh;}
+    .page-wrap{max-width:980px;margin:0 auto;padding:0 16px 60px;}
+    header{text-align:center;padding:28px 0 20px;border-bottom:1px solid var(--border);margin-bottom:24px;}
+    .crown{font-size:36px;margin-bottom:8px;display:block;filter:drop-shadow(0 0 12px rgba(46,125,50,0.4));}
+    header h1{font-family:'Playfair Display',serif;font-size:clamp(20px,4vw,34px);font-weight:900;color:var(--gold-light);margin-bottom:4px;}
+    header p{color:var(--text-dim);font-style:italic;font-size:15px;}
+    .board-selector{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+    .bs-btn{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;padding:8px 16px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;transition:all 0.2s;}
+    .bs-btn:hover{border-color:var(--green);color:var(--green);}
+    .bs-btn.active{background:var(--green);border-color:var(--green);color:#fff;}
+    .lobby{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--green);padding:22px 26px;margin-bottom:22px;}
+    .lobby h2{font-family:'Playfair Display',serif;font-size:18px;color:#1a3d1a;margin-bottom:14px;}
+    .lobby-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+    .btn-main{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;padding:10px 24px;border:none;cursor:pointer;transition:all 0.2s;}
+    .btn-create{background:var(--green);color:#fff;}
+    .btn-create:hover{background:#1a5e1e;}
+    .join-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+    .code-input{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;padding:8px 14px;border:2px solid var(--border);background:var(--surface2);color:var(--text);width:130px;text-transform:uppercase;letter-spacing:0.15em;text-align:center;}
+    .code-input:focus{outline:none;border-color:var(--green);}
+    .btn-small{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;padding:8px 18px;border:none;cursor:pointer;background:var(--green);color:#fff;}
+    .room-info{background:var(--surface);border:1px solid var(--border);padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+    .room-code-display{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--green);letter-spacing:0.2em;cursor:pointer;}
+    .room-label{font-size:12px;color:var(--text-dim);font-style:italic;}
+    .copy-hint{font-size:11px;color:var(--text-dim);}
+    .waiting-msg{background:rgba(46,125,50,0.08);border:1px solid var(--green);padding:10px 16px;color:#1a3d1a;font-size:14px;margin-bottom:14px;text-align:center;font-style:italic;}
+    .player-color{display:inline-block;padding:4px 14px;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;}
+    .player-color.white{background:#fff8e8;border:1px solid #c9a84c;color:#5a4010;}
+    .player-color.black{background:#1a1208;color:#e8c96a;border:1px solid #6a5428;}
+    .game-panel{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+    .turn-box{flex:1;min-width:140px;background:var(--surface);border:1px solid var(--border);padding:12px 14px;text-align:center;}
+    .turn-box h4{font-family:'Playfair Display',serif;color:var(--text-dim);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;}
+    .turn-indicator{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;}
+    .turn-indicator.white-turn{color:#5a4010;}
+    .turn-indicator.black-turn{color:var(--green);}
+    .move-log-box{flex:2;min-width:180px;background:var(--surface);border:1px solid var(--border);padding:12px 14px;max-height:100px;overflow-y:auto;}
+    .move-log-box h4{font-family:'Playfair Display',serif;color:var(--text-dim);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;}
+    .move-log{font-size:13px;color:var(--text-dim);}
+    .move-entry{padding:1px 0;border-bottom:1px solid rgba(178,216,178,0.4);}
+    .btn-leave{background:var(--surface2);border:1px solid #c06060;color:#c06060;font-family:'Playfair Display',serif;font-size:12px;padding:6px 14px;cursor:pointer;}
+    .status-msg{text-align:center;font-family:'Playfair Display',serif;font-size:16px;min-height:24px;margin-bottom:10px;color:#1a3d1a;font-weight:600;}
+    .status-msg.check{color:#c07000;}
+    .status-msg.checkmate{color:#c03000;font-size:18px;font-weight:700;}
+    .board-container{display:flex;justify-content:center;margin-bottom:20px;overflow-x:auto;padding:4px;-webkit-overflow-scrolling:touch;}
+    .board-outer{display:inline-block;padding:12px;background:var(--surface);border:1px solid var(--border);box-shadow:0 0 0 1px var(--gold-dim),0 6px 30px rgba(0,0,0,0.12);}
+    .board-with-ranks{display:flex;align-items:stretch;gap:3px;}
+    .rank-labels{display:flex;flex-direction:column;justify-content:space-around;width:16px;}
+    .rank-labels span,.file-labels span{font-size:9px;color:var(--gold-dim);font-family:'EB Garamond',serif;display:flex;align-items:center;justify-content:center;}
+    .file-labels{display:flex;justify-content:space-around;}
+    .chess-board{display:grid;border:1px solid var(--gold-dim);}
+    .sq{display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;transition:filter 0.12s,box-shadow 0.12s;position:relative;}
+    .sq.light{background:var(--light-sq);}
+    .sq.dark{background:var(--dark-sq);}
+    .sq:hover{filter:brightness(1.15);}
+    .sq.selected{box-shadow:inset 0 0 0 3px #f0e040;}
+    .sq.possible{box-shadow:inset 0 0 0 3px rgba(80,200,80,0.7);}
+    .sq.possible::after{content:'';position:absolute;width:28%;height:28%;background:rgba(80,200,80,0.5);border-radius:50%;}
+    .sq.last-move{box-shadow:inset 0 0 0 2px rgba(255,200,50,0.6);}
+    .sq.in-check{box-shadow:inset 0 0 0 3px rgba(220,50,50,0.9);background:#8b2020!important;}
+    .piece-uni{line-height:1;pointer-events:none;}
+    .piece-uni.white{color:#fffae8;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.95));}
+    .piece-uni.black{color:#160e00;filter:drop-shadow(0 1px 2px rgba(255,255,220,0.15));}
+    .conn-bar{position:fixed;top:8px;right:8px;background:var(--surface);border:1px solid var(--border);padding:4px 10px;font-size:12px;font-family:'Playfair Display',serif;z-index:100;}
+    .conn-ok{color:var(--green);}
+    .conn-err{color:#c03000;}
+    footer{text-align:center;padding:20px 0;border-top:1px solid var(--border);color:var(--text-dim);font-style:italic;font-size:14px;}
+    footer a{color:var(--green);text-decoration:none;}
+    .hidden{display:none!important;}
+    @media(max-width:560px){.lobby{padding:14px 12px;}.lobby-btns{flex-direction:column;}.join-row{flex-direction:column;}.room-info{flex-direction:column;}}
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="conn-bar" id="connBar"><span class="conn-ok">● Подключение...</span></div>
+
+  <header>
+    <span class="crown">♚</span>
+    <h1 id="pageTitle">Chess760 — Онлайн</h1>
+    <p id="pageSubtitle">Игра с другом через интернет</p>
+  </header>
+
+  <!-- Выбор доски -->
+  <div class="board-selector">
+    <button class="bs-btn" onclick="selectBoard(8)">8 × 8</button>
+    <button class="bs-btn" onclick="selectBoard(10)">10 × 10</button>
+    <button class="bs-btn" onclick="selectBoard(12)">12 × 12</button>
+    <button class="bs-btn" onclick="selectBoard(14)">14 × 14</button>
+    <button class="bs-btn" onclick="selectBoard(16)">16 × 16</button>
+  </div>
+
+  <!-- ЛОББИ -->
+  <div class="lobby" id="lobbySection">
+    <h2 id="lobbyTitle">♟ Начать онлайн-партию</h2>
+    <div class="lobby-btns">
+      <button class="btn-main btn-create" onclick="createRoom()">🎮 Создать партию</button>
+    </div>
+    <div class="join-row">
+      <input class="code-input" id="joinCodeInput" placeholder="КОД" maxlength="6"
+             oninput="this.value=this.value.toUpperCase()">
+      <button class="btn-small" onclick="joinRoom()">Войти →</button>
+    </div>
+    <p style="margin-top:12px;font-size:13px;color:var(--text-dim);font-style:italic;">
+      Создайте партию и отправьте код другу, или введите код друга чтобы войти.
+    </p>
+  </div>
+
+  <!-- КОМНАТА -->
+  <div id="roomSection" class="hidden">
+    <div class="room-info">
+      <div>
+        <div class="room-label">Код партии — отправьте другу:</div>
+        <div class="room-code-display" id="roomCodeDisplay" onclick="copyCode()">——</div>
+        <div class="copy-hint">нажмите чтобы скопировать</div>
+      </div>
+      <div id="myColorDisplay"></div>
+      <button class="btn-leave" onclick="leaveRoom()">✕ Выйти</button>
+    </div>
+    <div class="waiting-msg" id="waitingMsg">⏳ Ожидаем второго игрока... Отправьте код другу!</div>
+    <div class="game-panel">
+      <div class="turn-box">
+        <h4>Ход</h4>
+        <div class="turn-indicator white-turn" id="turnIndicator">♔ Белые</div>
+      </div>
+      <div class="move-log-box">
+        <h4>История ходов</h4>
+        <div class="move-log" id="moveLog"></div>
+      </div>
+    </div>
+    <div class="status-msg" id="statusMsg"></div>
+    <div class="board-container" id="boardContainer"></div>
+  </div>
+
+  <footer>
+    <a href="index.html">← На главную</a> &nbsp;·&nbsp;
+    <a href="chess.html">Играть локально</a> &nbsp;·&nbsp;
+    Chess760
+  </footer>
+</div>
+
+<script>
+// ════════════════════════════════════════════════
+//  FIREBASE
+// ════════════════════════════════════════════════
+firebase.initializeApp({
+  databaseURL: 'https://megachess-fb04d-default-rtdb.europe-west1.firebasedatabase.app'
+});
+const db = firebase.database();
+
+db.ref('.info/connected').on('value', snap => {
+  const el = document.getElementById('connBar');
+  el.innerHTML = snap.val()
+    ? '<span class="conn-ok">● Онлайн</span>'
+    : '<span class="conn-err">● Нет связи</span>';
+});
+
+// ════════════════════════════════════════════════
+//  НАСТРОЙКИ ДОСОК
+// ════════════════════════════════════════════════
+const BOARD_NAMES = {
+  8:  'Классические шахматы 8×8',
+  10: 'Русские шахматы 10×10',
+  12: 'Большие шахматы 12×12',
+  14: 'Царские шахматы 14×14',
+  16: 'Морские шахматы 16×16',
+};
+
+const SETUPS = {
+  8:  { files:['a','b','c','d','e','f','g','h'],
+        back:['Л','К','С','Ф','Кр','С','К','Л'] },
+  10: { files:['a','b','c','d','e','f','g','h','i','j'],
+        back:['ф','Л','К','С','Ф','Кр','С','К','Л','ф'] },
+  12: { files:['a','b','c','d','e','f','g','h','i','j','k','l'],
+        back:['Лс','ф','Л','К','С','Ф','Кр','С','К','Л','ф','Лс'] },
+  14: { files:['a','b','c','d','e','f','g','h','i','j','k','l','m','n'],
+        back:['Кк','Лс','ф','Л','К','С','Ф','Кр','С','К','Л','ф','Лс','Кк'] },
+  16: { files:['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p'],
+        back:['Сл','Кк','Лс','ф','Л','К','С','Ф','Кр','С','К','Л','ф','Лс','Кк','Сл'] },
+};
+
+const UNI = {
+  'Кр':{w:'♔',b:'♚'}, 'Ф':{w:'♕',b:'♛'},
+  'Л': {w:'♖',b:'♜'}, 'С':{w:'♗',b:'♝'},
+  'К': {w:'♘',b:'♞'}, 'п':{w:'♙',b:'♟'},
+};
+const NEW_ABBR = new Set(['ф','Лс','Кк','Сл']);
+
+// ════════════════════════════════════════════════
+//  ТЕКУЩИЙ РАЗМЕР ДОСКИ
+// ════════════════════════════════════════════════
+let N = 10; // по умолчанию
+
+function selectBoard(n){
+  if(roomCode) return; // нельзя менять во время игры
+  N = n;
+  document.querySelectorAll('.bs-btn').forEach((b,i)=>{
+    b.classList.toggle('active', [8,10,12,14,16][i]===n);
+  });
+  document.getElementById('pageTitle').textContent = 'Chess760 — ' + BOARD_NAMES[n];
+  document.getElementById('lobbyTitle').textContent = '♟ ' + BOARD_NAMES[n] + ' — Онлайн';
+}
+
+// ════════════════════════════════════════════════
+//  ЛОГИКА ХОДОВ
+// ════════════════════════════════════════════════
+function inB(r,c){ return r>=0&&r<N&&c>=0&&c<N; }
+
+function sliding(board,r,c,dirs,side,limit){
+  const moves=[];
+  for(const [dr,dc] of dirs){
+    for(let s=1;s<=limit;s++){
+      const nr=r+dr*s,nc=c+dc*s;
+      if(!inB(nr,nc)) break;
+      if(board[nr][nc]&&board[nr][nc].side===side) break;
+      moves.push({r:nr,c:nc});
+      if(board[nr][nc]) break;
+    }
+  }
+  return moves;
+}
+
+function rawMoves(board,r,c){
+  const p=board[r][c]; if(!p) return [];
+  const {abbr,side}=p;
+  if(abbr==='Л') return sliding(board,r,c,[[1,0],[-1,0],[0,1],[0,-1]],side,N);
+  if(abbr==='С') return sliding(board,r,c,[[1,1],[1,-1],[-1,1],[-1,-1]],side,N);
+  if(abbr==='Ф') return sliding(board,r,c,[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]],side,N);
+  if(abbr==='ф'){
+    const limit=N<=10?2:N<=12?3:N<=14?4:5;
+    return sliding(board,r,c,[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]],side,limit);
+  }
+  if(abbr==='Лс'){
+    const mv=sliding(board,r,c,[[1,0],[-1,0],[0,1],[0,-1]],side,N).filter(m=>!board[m.r][m.c]);
+    const cp=sliding(board,r,c,[[1,1],[1,-1],[-1,1],[-1,-1]],side,N).filter(m=>board[m.r][m.c]&&board[m.r][m.c].side!==side);
+    return [...mv,...cp];
+  }
+  if(abbr==='Кк'){
+    const lim=4; const moves=[];
+    for(const [dr1,dc1] of [[1,0],[-1,0],[0,1],[0,-1]]){
+      for(let s=1;s<=lim;s++){
+        const mr=r+dr1*s,mc=c+dc1*s;
+        if(!inB(mr,mc)) break;
+        if(board[mr][mc]&&board[mr][mc].side===side) break;
+        for(const [dr2,dc2] of [[1,1],[1,-1],[-1,1],[-1,-1]]){
+          for(let s2=1;s2<=lim;s2++){
+            const nr=mr+dr2*s2,nc=mc+dc2*s2;
+            if(!inB(nr,nc)) break;
+            if(board[nr][nc]&&board[nr][nc].side===side) break;
+            moves.push({r:nr,c:nc});
+            if(board[nr][nc]) break;
+          }
+        }
+        if(board[mr][mc]) break;
+      }
+    }
+    const seen=new Set();
+    return moves.filter(m=>{const k=`${m.r},${m.c}`;if(seen.has(k))return false;seen.add(k);return true;});
+  }
+  if(abbr==='Сл'){
+    const mv=sliding(board,r,c,[[1,1],[1,-1],[-1,1],[-1,-1]],side,N).filter(m=>!board[m.r][m.c]);
+    const cp=sliding(board,r,c,[[1,0],[-1,0],[0,1],[0,-1]],side,N).filter(m=>board[m.r][m.c]&&board[m.r][m.c].side!==side);
+    return [...mv,...cp];
+  }
+  if(abbr==='Кр'){
+    const m=[];
+    for(const [dr,dc] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]){
+      const nr=r+dr,nc=c+dc;
+      if(inB(nr,nc)&&!(board[nr][nc]&&board[nr][nc].side===side)) m.push({r:nr,c:nc});
+    }
+    return m;
+  }
+  if(abbr==='К'){
+    const m=[];
+    for(const [dr,dc] of [[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]]){
+      const nr=r+dr,nc=c+dc;
+      if(inB(nr,nc)&&!(board[nr][nc]&&board[nr][nc].side===side)) m.push({r:nr,c:nc});
+    }
+    return m;
+  }
+  if(abbr==='п'){
+    const m=[],dir=side==='white'?-1:1,sr=side==='white'?N-2:1;
+    const fml=N<=10?2:N<=12?3:N<=14?4:5;
+    if(inB(r+dir,c)&&!board[r+dir][c]){
+      m.push({r:r+dir,c});
+      if(r===sr){
+        for(let s=2;s<=fml;s++){
+          if(!inB(r+dir*s,c)||board[r+dir*s][c]) break;
+          m.push({r:r+dir*s,c});
+        }
+      }
+    }
+    for(const dc of [-1,1])
+      if(inB(r+dir,c+dc)&&board[r+dir][c+dc]&&board[r+dir][c+dc].side!==side)
+        m.push({r:r+dir,c:c+dc});
+    return m;
+  }
+  return [];
+}
+
+function cloneB(b){ return b.map(row=>row.map(c=>c?{...c}:null)); }
+
+function findKing(board,side){
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++)
+    if(board[r][c]&&board[r][c].abbr==='Кр'&&board[r][c].side===side) return {r,c};
+  return null;
+}
+
+function attacked(board,r,c,bySide){
+  for(let rr=0;rr<N;rr++) for(let cc=0;cc<N;cc++)
+    if(board[rr][cc]&&board[rr][cc].side===bySide)
+      if(rawMoves(board,rr,cc).find(m=>m.r===r&&m.c===c)) return true;
+  return false;
+}
+
+function legalMoves(board,r,c){
+  const p=board[r][c]; if(!p) return [];
+  const opp=p.side==='white'?'black':'white';
+  return rawMoves(board,r,c).filter(m=>{
+    const b2=cloneB(board);
+    b2[m.r][m.c]=b2[r][c]; b2[r][c]=null;
+    const k=findKing(b2,p.side);
+    return k&&!attacked(b2,k.r,k.c,opp);
+  });
+}
+
+function hasAnyMove(board,side){
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++)
+    if(board[r][c]&&board[r][c].side===side&&legalMoves(board,r,c).length>0) return true;
+  return false;
+}
+
+function initBoard(){
+  const b=Array.from({length:N},()=>Array(N).fill(null));
+  SETUPS[N].back.forEach((p,c)=>{
+    b[0][c]={abbr:p,side:'black'};
+    b[N-1][c]={abbr:p,side:'white'};
+  });
+  for(let c=0;c<N;c++){
+    b[1][c]={abbr:'п',side:'black'};
+    b[N-2][c]={abbr:'п',side:'white'};
+  }
+  return b;
+}
+
+// ════════════════════════════════════════════════
+//  СОСТОЯНИЕ
+// ════════════════════════════════════════════════
+let roomCode=null, myColor=null, board=[], turn='white';
+let selected=null, lastMove=null, moveCount=0, gameOver=false;
+let roomListener=null;
+
+function boardToArr(b){ return b.map(row=>row.map(c=>c?c.abbr+'|'+c.side:'0')); }
+function arrToBoard(a){ return a.map(row=>row.map(c=>{ if(c==='0')return null; const[abbr,side]=c.split('|'); return{abbr,side}; })); }
+
+function genCode(){
+  const ch='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code='';
+  for(let i=0;i<6;i++) code+=ch[Math.floor(Math.random()*ch.length)];
+  return code;
+}
+
+// ════════════════════════════════════════════════
+//  СОЗДАТЬ КОМНАТУ
+// ════════════════════════════════════════════════
+function createRoom(){
+  const code=genCode();
+  roomCode=code; myColor='white';
+  const state={
+    board:boardToArr(initBoard()),
+    turn:'white', moveCount:0, lastMove:null,
+    gameOver:false, statusMsg:'', moves:[],
+    players:{white:true,black:false},
+    boardSize:N
+  };
+  db.ref('rooms/'+code).set(state).then(()=>enterRoom(code));
+}
+
+// ════════════════════════════════════════════════
+//  ВОЙТИ В КОМНАТУ
+// ════════════════════════════════════════════════
+function joinRoom(){
+  const code=document.getElementById('joinCodeInput').value.trim().toUpperCase();
+  if(code.length<4){ alert('Введите код партии!'); return; }
+  db.ref('rooms/'+code).get().then(snap=>{
+    if(!snap.exists()){ alert('Партия не найдена. Проверьте код.'); return; }
+    const data=snap.val();
+    if(data.players&&data.players.black){ alert('В партии уже два игрока!'); return; }
+    // Берём размер доски из комнаты
+    if(data.boardSize) { N=data.boardSize; selectBoard(N); }
+    db.ref('rooms/'+code+'/players/black').set(true).then(()=>{
+      roomCode=code; myColor='black';
+      enterRoom(code);
+    });
+  });
+}
+
+// ════════════════════════════════════════════════
+//  ВОЙТИ В ИНТЕРФЕЙС
+// ════════════════════════════════════════════════
+function enterRoom(code){
+  document.getElementById('lobbySection').classList.add('hidden');
+  document.getElementById('roomSection').classList.remove('hidden');
+  document.getElementById('roomCodeDisplay').textContent=code;
+  document.querySelectorAll('.bs-btn').forEach(b=>b.disabled=true);
+
+  const colorEl=document.getElementById('myColorDisplay');
+  colorEl.innerHTML=myColor==='white'
+    ? '<span class="player-color white">♔ Вы — Белые</span>'
+    : '<span class="player-color black">♚ Вы — Чёрные</span>';
+
+  roomListener=db.ref('rooms/'+code).on('value',snap=>{
+    if(!snap.exists()) return;
+    const data=snap.val();
+
+    const bothConnected=data.players&&data.players.white&&data.players.black;
+    const waitEl=document.getElementById('waitingMsg');
+    waitEl.style.display=bothConnected?'none':'block';
+
+    board    =arrToBoard(data.board);
+    turn     =data.turn;
+    gameOver =data.gameOver||false;
+    lastMove =data.lastMove||null;
+    moveCount=data.moveCount||0;
+
+    const logEl=document.getElementById('moveLog');
+    logEl.innerHTML='';
+    if(data.moves&&Array.isArray(data.moves)){
+      data.moves.forEach(m=>{
+        const e=document.createElement('div');
+        e.className='move-entry'; e.textContent=m;
+        logEl.appendChild(e);
+      });
+      logEl.scrollTop=logEl.scrollHeight;
+    }
+
+    const msgEl=document.getElementById('statusMsg');
+    if(gameOver&&data.statusMsg){
+      msgEl.textContent=data.statusMsg;
+      msgEl.className='status-msg checkmate';
+    } else {
+      updateStatusMsg(bothConnected);
+    }
+
+    updateTurnDisplay();
+    renderBoard();
+  });
+}
+
+// ════════════════════════════════════════════════
+//  ВЫЙТИ
+// ════════════════════════════════════════════════
+function leaveRoom(){
+  if(roomListener) db.ref('rooms/'+roomCode).off('value',roomListener);
+  roomCode=null; myColor=null; selected=null;
+  document.getElementById('lobbySection').classList.remove('hidden');
+  document.getElementById('roomSection').classList.add('hidden');
+  document.getElementById('boardContainer').innerHTML='';
+  document.getElementById('moveLog').innerHTML='';
+  document.getElementById('statusMsg').textContent='';
+  document.getElementById('waitingMsg').style.display='block';
+  document.querySelectorAll('.bs-btn').forEach(b=>b.disabled=false);
+}
+
+function copyCode(){
+  if(!roomCode) return;
+  navigator.clipboard.writeText(roomCode).catch(()=>{});
+  const el=document.getElementById('roomCodeDisplay');
+  const old=el.textContent;
+  el.textContent='✓ Скопировано!';
+  setTimeout(()=>{el.textContent=old;},1500);
+}
+
+// ════════════════════════════════════════════════
+//  КЛИК ПО КЛЕТКЕ
+// ════════════════════════════════════════════════
+function handleClick(r,c){
+  if(gameOver) return;
+  if(turn!==myColor) return;
+
+  // Проверяем что оба игрока подключены
+  db.ref('rooms/'+roomCode+'/players').get().then(snap=>{
+    const players=snap.val()||{};
+    if(!players.white||!players.black) return;
+
+    const piece=board[r][c];
+    if(!selected){
+      if(piece&&piece.side===myColor){ selected={r,c}; renderBoard(); }
+      return;
+    }
+    if(piece&&piece.side===myColor){ selected={r,c}; renderBoard(); return; }
+
+    const legal=legalMoves(board,selected.r,selected.c);
+    const valid=legal.find(m=>m.r===r&&m.c===c);
+    if(!valid){ selected=null; renderBoard(); return; }
+
+    // Делаем ход
+    const moving=board[selected.r][selected.c];
+    const captured=board[r][c];
+    const nb=cloneB(board);
+    nb[r][c]=moving; nb[selected.r][selected.c]=null;
+
+    // Превращение пешки
+    if(moving.abbr==='п'){
+      if(moving.side==='white'&&r===0) nb[r][c]={abbr:'Ф',side:'white'};
+      if(moving.side==='black'&&r===N-1) nb[r][c]={abbr:'Ф',side:'black'};
+    }
+
+    const nextTurn=myColor==='white'?'black':'white';
+    const newCount=moveCount+1;
+    const files=SETUPS[N].files;
+    const moveStr=`${files[selected.c]}${N-selected.r}→${files[r]}${N-r}${captured?'×':''}`;
+    const moveLabel=newCount%2===1?`${Math.ceil(newCount/2)}. ${moveStr}`:`   ${moveStr}`;
+
+    // Проверка мата/пата
+    const nextKing=findKing(nb,nextTurn);
+    const opp=nextTurn==='white'?'black':'white';
+    const nextCheck=nextKing&&attacked(nb,nextKing.r,nextKing.c,opp);
+    const nextHas=hasAnyMove(nb,nextTurn);
+    let over=false,statusStr='';
+    if(!nextHas){
+      over=true;
+      statusStr=nextCheck
+        ?(myColor==='white'?'♚ Мат! Белые победили!':'♚ Мат! Чёрные победили!')
+        :'½ Пат — ничья!';
+    }
+
+    db.ref('rooms/'+roomCode+'/moves').get().then(snap2=>{
+      const moves=snap2.val()||[];
+      const updMoves=Array.isArray(moves)?[...moves]:[...Object.values(moves)];
+      updMoves.push(moveLabel);
+      db.ref('rooms/'+roomCode).update({
+        board:boardToArr(nb),
+        turn:nextTurn,
+        moveCount:newCount,
+        lastMove:{fr:selected.r,fc:selected.c,tr:r,tc:c},
+        gameOver:over,
+        statusMsg:statusStr,
+        moves:updMoves
+      });
+    });
+
+    selected=null;
+  });
+}
+
+// ════════════════════════════════════════════════
+//  ОТОБРАЖЕНИЕ
+// ════════════════════════════════════════════════
+function updateTurnDisplay(){
+  const el=document.getElementById('turnIndicator');
+  if(turn==='white'){
+    el.className='turn-indicator white-turn';
+    el.textContent='♔ Белые';
+  } else {
+    el.className='turn-indicator black-turn';
+    el.textContent='♚ Чёрные';
+  }
+}
+
+function updateStatusMsg(bothConnected){
+  const msgEl=document.getElementById('statusMsg');
+  if(gameOver) return;
+  if(!bothConnected){
+    msgEl.textContent='⏳ Ожидаем второго игрока...';
+    msgEl.className='status-msg';
+    return;
+  }
+  const king=findKing(board,turn);
+  const opp=turn==='white'?'black':'white';
+  const inCheck=king&&attacked(board,king.r,king.c,opp);
+  if(turn===myColor){
+    msgEl.textContent=inCheck?'⚠️ Шах! Ваш ход!':'✅ Ваш ход!';
+    msgEl.className=inCheck?'status-msg check':'status-msg';
+  } else {
+    msgEl.textContent=inCheck?'⚠️ Шах сопернику!':'⏳ Ход соперника...';
+    msgEl.className=inCheck?'status-msg check':'status-msg';
+  }
+}
+
+function makePieceEl(abbr,side,sq){
+  if(UNI[abbr]){
+    const s=document.createElement('span');
+    s.className='piece-uni '+side;
+    s.textContent=UNI[abbr][side==='white'?'w':'b'];
+    s.style.fontSize=Math.round(sq*0.62)+'px';
+    return s;
+  }
+  if(NEW_ABBR.has(abbr)){
+    return makeSVGPiece(abbr,side,sq);
+  }
+  return null;
+}
+
+function makeSVGPiece(abbr,side,sq){
+  const w=side==='white';
+  const fill=w?'#fffae8':'#2a1a00';
+  const stroke=w?'#5a4010':'#c9a84c';
+  const detail=w?'#c9a84c':'#e8c96a';
+  const inner=w?'#5a4010':'#c9a84c';
+  const div=document.createElement('div');
+  div.style.cssText=`width:${sq}px;height:${sq}px;display:flex;align-items:center;justify-content:center;`;
+  const size=Math.round(sq*0.86);
+  let svg='';
+
+  if(abbr==='ф'){
+    svg=`<svg width="${size}" height="${size}" viewBox="0 0 100 100">
+      <rect x="18" y="88" width="64" height="9" rx="3" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="30" y="68" width="40" height="22" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="22" y="44" width="56" height="27" rx="4" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <line x1="26" y1="52" x2="74" y2="52" stroke="${detail}" stroke-width="2.5"/>
+      <line x1="26" y1="60" x2="74" y2="60" stroke="${detail}" stroke-width="2.5"/>
+      <rect x="38" y="34" width="24" height="13" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <ellipse cx="50" cy="27" rx="20" ry="16" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="38" y="22" width="24" height="10" rx="2" fill="${inner}" opacity="0.25"/>
+      <line x1="38" y1="14" x2="34" y2="2" stroke="${detail}" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="50" y1="11" x2="50" y2="0" stroke="${detail}" stroke-width="3" stroke-linecap="round"/>
+      <line x1="62" y1="14" x2="66" y2="2" stroke="${detail}" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="34" cy="2" r="3" fill="${detail}"/>
+      <circle cx="50" cy="0" r="3.5" fill="${detail}"/>
+      <circle cx="66" cy="2" r="3" fill="${detail}"/>
+    </svg>`;
+  } else if(abbr==='Лс'){
+    svg=`<svg width="${size}" height="${size}" viewBox="0 0 100 100">
+      <rect x="12" y="89" width="76" height="9" rx="3" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="20" y="68" width="60" height="23" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="15" y="61" width="70" height="10" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="20" y="36" width="60" height="27" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="20" y="24" width="16" height="15" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="42" y="24" width="16" height="15" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="64" y="24" width="16" height="15" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="38" y="80" width="24" height="6" rx="2" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <ellipse cx="50" cy="64" rx="14" ry="17" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <ellipse cx="50" cy="46" rx="10" ry="10" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <ellipse cx="50" cy="34" rx="6" ry="7" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <circle cx="50" cy="26" r="4" fill="none" stroke="${inner}" stroke-width="1.8"/>
+    </svg>`;
+  } else if(abbr==='Кк'){
+    svg=`<svg width="${size}" height="${size}" viewBox="0 0 100 100">
+      <circle cx="26" cy="82" r="14" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <circle cx="26" cy="82" r="7" fill="${detail}" opacity="0.35"/>
+      <circle cx="74" cy="82" r="14" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <circle cx="74" cy="82" r="7" fill="${detail}" opacity="0.35"/>
+      <rect x="18" y="60" width="64" height="24" rx="4" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="22" y="38" width="58" height="25" rx="5" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="72" y="40" width="20" height="21" rx="5" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <ellipse cx="93" cy="50" rx="7" ry="10" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <rect x="30" y="26" width="40" height="14" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <polygon points="32,26 39,14 46,26" fill="${detail}" stroke="${stroke}" stroke-width="1"/>
+      <polygon points="46,26 50,12 54,26" fill="${detail}" stroke="${stroke}" stroke-width="1"/>
+      <polygon points="54,26 61,14 68,26" fill="${detail}" stroke="${stroke}" stroke-width="1"/>
+      <circle cx="42" cy="6" r="9" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+    </svg>`;
+  } else if(abbr==='Сл'){
+    svg=`<svg width="${size}" height="${size}" viewBox="0 0 100 100">
+      <rect x="28" y="89" width="44" height="9" rx="3" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <ellipse cx="50" cy="68" rx="28" ry="28" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <ellipse cx="50" cy="40" rx="20" ry="20" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <ellipse cx="50" cy="22" rx="12" ry="14" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <circle cx="50" cy="8" r="7" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+      <path d="M44 18 Q50 13 56 18" fill="none" stroke="${stroke}" stroke-width="2"/>
+      <rect x="33" y="50" width="9" height="8" rx="1" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <rect x="45" y="50" width="9" height="8" rx="1" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <rect x="57" y="50" width="9" height="8" rx="1" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <rect x="31" y="57" width="37" height="14" rx="2" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <rect x="28" y="69" width="43" height="6" rx="2" fill="none" stroke="${inner}" stroke-width="1.8"/>
+      <rect x="31" y="74" width="37" height="12" rx="2" fill="none" stroke="${inner}" stroke-width="1.8"/>
+    </svg>`;
+  }
+
+  div.innerHTML=svg;
+  return div;
+}
+
+function getAdaptiveSq(){
+  const available=Math.min(window.innerWidth,900)-40-44;
+  const maxSq=Math.floor(available/N);
+  return Math.min(50,Math.max(maxSq,20));
+}
+
+function renderBoard(){
+  const sq=getAdaptiveSq();
+  const files=SETUPS[N].files;
+  const flip=myColor==='black';
+  const cont=document.getElementById('boardContainer');
+  cont.innerHTML='';
+  const outer=document.createElement('div'); outer.className='board-outer';
+
+  const topLbl=document.createElement('div'); topLbl.className='file-labels';
+  topLbl.style.cssText=`margin-left:20px;margin-bottom:2px;width:${N*sq}px;`;
+  const fileOrder=flip?[...files].reverse():files;
+  fileOrder.forEach(f=>{const s=document.createElement('span');s.textContent=f;s.style.width=sq+'px';topLbl.appendChild(s);});
+  outer.appendChild(topLbl);
+
+  const wr=document.createElement('div'); wr.className='board-with-ranks';
+  const makeRanks=()=>{
+    const d=document.createElement('div'); d.className='rank-labels';
+    const arr=Array.from({length:N},(_,i)=>flip?i+1:N-i);
+    arr.forEach(n=>{const s=document.createElement('span');s.textContent=n;s.style.height=sq+'px';d.appendChild(s);});
+    return d;
+  };
+
+  const chess=document.createElement('div'); chess.className='chess-board';
+  chess.style.cssText=`grid-template-columns:repeat(${N},${sq}px);grid-template-rows:repeat(${N},${sq}px);`;
+
+  const possible=selected?legalMoves(board,selected.r,selected.c).map(m=>`${m.r},${m.c}`):[];
+  const king=findKing(board,turn);
+  const opp=turn==='white'?'black':'white';
+  const inCheck=king&&attacked(board,king.r,king.c,opp);
+
+  const rowOrder=flip?Array.from({length:N},(_,i)=>N-1-i):Array.from({length:N},(_,i)=>i);
+  const colOrder=flip?Array.from({length:N},(_,i)=>N-1-i):Array.from({length:N},(_,i)=>i);
+
+  for(const r of rowOrder){
+    for(const c of colOrder){
+      const cell=document.createElement('div');
+      let cls='sq '+((r+c)%2===0?'light':'dark');
+      if(selected&&selected.r===r&&selected.c===c) cls+=' selected';
+      if(possible.includes(`${r},${c}`)) cls+=' possible';
+      if(lastMove&&((lastMove.fr===r&&lastMove.fc===c)||(lastMove.tr===r&&lastMove.tc===c))) cls+=' last-move';
+      if(inCheck&&king&&king.r===r&&king.c===c) cls+=' in-check';
+      cell.className=cls;
+      cell.style.width=sq+'px'; cell.style.height=sq+'px';
+      const p=board[r][c];
+      if(p){const el=makePieceEl(p.abbr,p.side,sq);if(el)cell.appendChild(el);}
+      cell.addEventListener('click',()=>handleClick(r,c));
+      chess.appendChild(cell);
+    }
+  }
+
+  wr.appendChild(makeRanks()); wr.appendChild(chess); wr.appendChild(makeRanks());
+  outer.appendChild(wr);
+
+  const botLbl=document.createElement('div'); botLbl.className='file-labels';
+  botLbl.style.cssText=`margin-left:20px;margin-top:2px;width:${N*sq}px;`;
+  fileOrder.forEach(f=>{const s=document.createElement('span');s.textContent=f;s.style.width=sq+'px';botLbl.appendChild(s);});
+  outer.appendChild(botLbl);
+  cont.appendChild(outer);
+}
+
+// ════════════════════════════════════════════════
+//  ИНИЦИАЛИЗАЦИЯ — читаем параметр ?board=N из URL
+// ════════════════════════════════════════════════
+(function init(){
+  const params=new URLSearchParams(window.location.search);
+  const b=parseInt(params.get('board')||'10');
+  const validSizes=[8,10,12,14,16];
+  N=validSizes.includes(b)?b:10;
+  selectBoard(N);
+})();
+
+window.addEventListener('resize',()=>{ if(board.length) renderBoard(); });
+</script>
+</body>
+</html>
