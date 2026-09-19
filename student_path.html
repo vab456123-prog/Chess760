@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>English School — Путь ученика</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#68738a;--line:#e3e8f1;--accent:#3b5ccc;--accent2:#eef2ff}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(135deg,#f7f9ff,#eef5f3);color:var(--text)}
+header{padding:26px 6%;display:flex;justify-content:space-between}.logo{font-size:22px;font-weight:800}.tag{color:var(--muted);font-size:14px}
+main{max-width:1100px;margin:auto;padding:10px 22px 60px}
+
+.panel{background:#fff;border:1px solid var(--line);border-radius:26px;padding:28px;box-shadow:0 14px 40px #26365a12;margin-top:20px}
+.panel h2{margin-top:0}
+.bubble{background:#f3f5f9;border-radius:20px;padding:18px;line-height:1.55}.bubble.ai{background:var(--accent2)}
+button{border:0;border-radius:14px;padding:12px 18px;background:var(--accent);color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px}
+button:hover{opacity:0.92}
+button:disabled{background:#bcc5d8;cursor:not-allowed}
+.level{padding:10px 14px;border:1px solid var(--line);border-radius:999px;display:inline-block}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:20px}
+
+.card-overlay{position:fixed;inset:0;background:rgba(15,22,38,.48);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.card-modal{width:min(640px,94vw);background:#fff;border-radius:26px;padding:28px;position:relative;box-shadow:0 25px 70px rgba(0,0,0,.25);max-height:90vh;overflow-y:auto}
+.card-close{position:absolute;right:16px;top:12px;border:0;background:transparent;color:#68738a;font-size:30px;cursor:pointer}
+.card-face{min-height:280px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.card-face .big-word{font-size:52px;font-weight:800;margin:10px}.card-instruction{font-size:18px;line-height:1.5;margin:10px 0 18px}
+.card-input{width:min(360px,90%);padding:14px;border:1px solid var(--line);border-radius:14px;font-size:20px;text-align:center;font-weight:700}
+.card-feedback{min-height:28px;margin-top:12px;font-weight:700}.card-back{display:none}.card-back.show{display:flex}.card-front.hide{display:none}
+
+.word-count-selector{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.word-count-selector label{font-weight:700;color:var(--text);font-size:15px}
+.count-btn{background:#eef2ff;color:#29449a;border:1px solid #c9d2ea;padding:8px 16px;border-radius:12px;cursor:pointer;font-weight:700;margin-top:0}
+.count-btn.active{background:#3b5ccc;color:#fff;border-color:#3b5ccc}
+
+.memory-word-line{display:grid;grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));gap:14px;margin-top:18px}
+.memory-word-chip{min-height:80px;border:2px solid #b8c9ee;background:#e8f0ff;color:#152b52;border-radius:18px;padding:14px 10px;font-size:20px;font-weight:800;cursor:pointer;box-shadow:0 6px 14px rgba(45,78,135,.08);transition:transform .2s,box-shadow .2s,border-color .2s,background .2s;display:flex;align-items:center;justify-content:center;word-break:break-word}
+.memory-word-chip:hover{transform:translateY(-3px);border-color:#5f8ff5;background:#dce8ff;box-shadow:0 10px 20px rgba(45,78,135,.14)}
+.memory-word-chip.done{background:#e5f6eb !important;border-color:#82c69a !important;color:#1e633d}
+.memory-word-chip.current{background:#cfdcff !important;border-color:#4e7fe8 !important;box-shadow:0 0 0 4px #e8efff}
+
+.memory-progress-panel{margin-top:24px;padding:20px 22px;border:1px solid #e0e6f2;border-radius:22px;background:#fbfcff}
+.memory-progress-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.memory-progress-title{font-size:20px;font-weight:800;color:#152b52}
+.memory-progress-count{display:inline-block;margin-top:7px;padding:8px 13px;border-radius:10px;background:#e7efff;color:#244b9b;font-size:15px;font-weight:700}
+.memory-progress-message{padding:12px 16px;border-radius:14px;background:#edf4ff;color:#244b9b;font-size:14px}
+
+.learning-stage{width:min(520px,92%);margin:0 auto 12px;padding:10px 14px;border-radius:12px;background:#f3f6fc;color:#53627a;font-size:14px}
+.learning-stage strong{color:#1b3764}
+.stage-dots{display:flex;gap:7px;justify-content:center;margin:10px 0 16px}
+.stage-dot{width:9px;height:9px;border-radius:50%;background:#d5ddec}
+.stage-dot.active{background:#5b82dc;transform:scale(1.15)}
+.stage-dot.done{background:#70b78b}
+
+.student-path{margin:22px 0;padding:20px;border:1px solid var(--line);border-radius:22px;background:#fbfcff;box-shadow:0 10px 28px rgba(38,54,90,.07)}
+.student-path-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
+.student-path h2{margin:0}.student-path-note{color:var(--muted);font-size:14px}
+.path-line{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.path-step{padding:12px;border-radius:14px;background:#f0f3f8;color:#6b7484;font-size:14px}
+.path-step.active{background:#e7efff;color:#244b9b;border:1px solid #bfd0f3}.path-step.done{background:#e8f6ed;color:#28734a}
+.path-step b{display:block;margin-bottom:4px}.path-back{display:inline-block;margin:4px 0 8px;text-decoration:none;color:#3b5ccc;font-weight:700}
+@media(max-width:700px){.path-line{grid-template-columns:1fr 1fr}}
+
+.audio-btn{background:#eef2ff;color:#29449a;border:1px solid #c9d2ea;margin-top:0;font-size:13px;padding:6px 12px;border-radius:10px}
+.audio-btn:hover{background:#e3e9ff}
+
+.dict-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:15px;max-height:300px;overflow-y:auto;padding:10px;border:1px solid var(--line);border-radius:12px}
+.dict-item{display:flex;align-items:center;gap:8px;font-size:14px;background:#f8fafe;padding:8px 12px;border-radius:8px;border:1px solid #e2e8f5}
+.dict-item input{cursor:pointer}
+
+.quiz-container{background:#f8fafe;border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:14px}
+.quiz-options{display:grid;grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));gap:10px;margin-top:12px}
+.quiz-btn{background:#fff;color:var(--text);border:1px solid var(--line);padding:12px;border-radius:12px;text-align:center;font-size:15px;font-weight:600}
+.quiz-btn:hover{background:#eef2ff;border-color:#b8c9ee}
+
+.prominent-input{
+  width:100%;
+  padding:14px 16px;
+  border-radius:14px;
+  border:2px solid var(--line);
+  font-size:18px;
+  font-weight:700;
+  color:var(--text);
+  background:#fff;
+  transition:all .2s ease;
+}
+.prominent-input:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(59,92,204,0.15);
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🇬🇧 English School</div>
+  <div class="tag">учимся с пользой, шаг за шагом</div>
+</header>
+
+<main>
+<a class="path-back" href="english_school.html">← Вернуться на главную English School</a>
+
+<section class="student-path">
+  <div class="student-path-head">
+    <h2>Путь ученика</h2>
+    <div class="student-path-note">Начало обучения · уровень A1</div>
+  </div>
+  <div class="path-line">
+    <div class="path-step active" id="path1"><b>1. Слова</b>Запоминаем карточки</div>
+    <div class="path-step" id="path2"><b>2. Письмо</b>Практика пройденного</div>
+    <div class="path-step" id="path3"><b>3. Диалог</b>Разговор с Учителем</div>
+    <div class="path-step" id="path4"><b>4. Проверка</b>Итоговый тест</div>
+  </div>
+</section>
+
+<section class="panel lesson-panel" id="lesson">
+  <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;flex-wrap:wrap">
+    <div>
+      <div style="color:var(--muted);font-size:13px">УРОК 1 · A1 · ЗНАКОМСТВО И БАЗА</div>
+      <h2 style="margin:5px 0">Vocabulary & Practice</h2>
+      <div style="color:var(--muted)">Изучайте новые слова и проходите адаптивную практику по ним.</div>
+    </div>
+    <div class="level">🌱 Beginner</div>
+  </div>
+
+  <!-- РАЗДЕЛ 1: ЗАПОМИНАЕМ СЛОВА -->
+  <div class="learning-box" style="margin-top:24px">
+    <h3>1. Запоминаем слова</h3>
+    
+    <div class="word-count-selector">
+      <label>Количество карточек:</label>
+      <button class="count-btn active" onclick="setWordLimit(10)">10</button>
+      <button class="count-btn" onclick="setWordLimit(15)">15</button>
+      <button class="count-btn" onclick="setWordLimit(20)">20</button>
+      <button class="count-btn" onclick="setWordLimit(25)">25</button>
+      <button class="count-btn" onclick="setWordLimit(30)">30</button>
+      <button class="count-btn" style="background:#3b5ccc;color:#fff;" onclick="openDictionaryModal()">⚙️ Выбрать слова из словаря</button>
+    </div>
+
+    <div class="memory-word-line" id="memoryWordLine"></div>
+
+    <div class="memory-progress-panel">
+      <div class="memory-progress-top">
+        <div>
+          <div class="memory-progress-title">Ваш прогресс</div>
+          <div class="memory-progress-count" id="memoryProgressCount">Пройдено: 0 из 10</div>
+        </div>
+        <div class="memory-progress-message" id="memoryProgressMessage">Выберите слово выше, чтобы начать задание.</div>
+      </div>
+    </div>
+
+    <div class="card-overlay" id="cardOverlay">
+      <div class="card-modal" onclick="event.stopPropagation()">
+        <button class="card-close" onclick="closeMemoryCard()">×</button>
+        <div class="card-face card-front" id="cardFront">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="big-word" id="cardTitle">?</div>
+            <button class="audio-btn" onclick="speakText(currentWordData.word)">🔊 Озвучить</button>
+          </div>
+          <div class="learning-stage" id="learningStage">
+            Этап <strong id="stageNumber">1</strong> из 3
+          </div>
+          <div class="stage-dots">
+            <span class="stage-dot active" id="stageDot0"></span>
+            <span class="stage-dot" id="stageDot1"></span>
+            <span class="stage-dot" id="stageDot2"></span>
+          </div>
+          <div class="card-instruction" id="cardInstruction">Введите изучаемое слово по памяти</div>
+          <input class="card-input" id="memoryInput" autocomplete="off" autocapitalize="none" spellcheck="false">
+          <button onclick="submitMemoryAnswer()">Проверить</button>
+          <div class="card-feedback" id="cardFeedback"></div>
+        </div>
+        <div class="card-face card-back" id="cardBack">
+          <div style="font-size:13px;color:var(--muted)">Результат</div>
+          <div class="big-word" id="backWord">name</div>
+          <div style="font-size:22px" id="backTranscription">/neɪm/</div>
+          <div style="font-size:19px;margin-top:10px" id="backTranslation">имя</div>
+          <button class="audio-btn" style="margin-top:14px" onclick="speakText(currentWordData.word)">🔊 Прослушать ещё раз</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-overlay" id="dictOverlay">
+      <div class="card-modal" onclick="event.stopPropagation()">
+        <button class="card-close" onclick="closeDictionaryModal()">×</button>
+        <h3>Выбор слов из словаря (Oxford 3000)</h3>
+        <p style="font-size:14px;color:var(--muted)">Выберите слова, которые хотите проработать в этом уроке (выбрано: <b id="selectedDictCount">0</b>):</p>
+        <div style="display:flex;gap:10px;margin-bottom:10px">
+          <button style="padding:6px 12px;font-size:13px" onclick="autoSelectDict(10)">Выбрать 10 случайных</button>
+          <button style="padding:6px 12px;font-size:13px" onclick="autoSelectDict(30)">Выбрать 30 случайных</button>
+        </div>
+        <div class="dict-grid" id="dictGrid"></div>
+        <button style="margin-top:16px;width:100%" onclick="applyCustomDictionary()">Сохранить выбор</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- РАЗДЕЛ 2: ПИСЬМО -->
+  <div class="learning-box" style="margin-top:28px">
+    <h3>2. Пишем (практика пройденных слов)</h3>
+    <div class="write-task">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div id="writingTaskPrompt" style="font-weight:700;font-size:16px">Сначала пройдите хотя бы одно слово в Разделе 1.</div>
+        <button class="audio-btn" id="writeAudioBtn" style="display:none;" onclick="speakText(currentWriteTask.word + '. ' + currentWriteTask.phrase)">🔊 Озвучить задание</button>
+      </div>
+      <input id="writeAnswer" class="prominent-input" placeholder="Введите ваш ответ на английском..." disabled>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+        <button id="writeBtn" onclick="checkWriting()" disabled>Проверить</button>
+        <button id="nextWriteBtn" onclick="generateWritingTask()" style="background:#68738a;display:none;">Следующее предложение ↻</button>
+      </div>
+      <div id="writingResult" style="margin-top:8px;font-weight:700"></div>
+    </div>
+  </div>
+
+  <!-- РАЗДЕЛ 3: РАЗГОВОР С ПРЕПОДАВАТЕЛЕМ -->
+  <div class="learning-box" style="margin-top:28px">
+    <h3>3. Разговор с преподавателем</h3>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="bubble ai" id="teacherQuestion" style="flex:1"><b>Teacher:</b> Сначала пройдите карточки слов выше, чтобы начать диалог.</div>
+      <button class="audio-btn" id="teacherAudioBtn" style="display:none;" onclick="speakText(currentTeacherText)">🔊 Озвучить вопрос</button>
+    </div>
+    <div class="write-task" style="margin-top:12px">
+      <input id="dialogAnswer" class="prominent-input" placeholder="Ваш ответ преподавателю..." disabled>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+        <button id="dialogBtn" onclick="checkDialogue()" disabled>Ответить</button>
+        <button id="nextDialogBtn" onclick="generateTeacherQuestion()" style="background:#68738a;display:none;">Новый вопрос ↻</button>
+      </div>
+      <div id="dialogResult" style="margin-top:8px;font-weight:700"></div>
+    </div>
+  </div>
+
+  <!-- РАЗДЕЛ 4: ПРОВЕРКА ЗНАНИЙ -->
+  <div class="learning-box" style="margin-top:28px">
+    <h3>4. Проверка знаний (<span id="quizTotalCount">10</span> <span id="quizWordDeclension">слов</span>)</h3>
+    <div class="quiz-container">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span style="font-weight:700;color:var(--muted)" id="quizProgress">Вопрос 1 из 10</span>
+        <span style="font-size:14px;color:#19734a;font-weight:700" id="quizScore">Счёт: 0</span>
+      </div>
+      <div class="bubble" style="font-size:18px;font-weight:700" id="quizQuestion">
+        Загрузка вопроса...
+      </div>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div id="quizFeedback" style="margin-top:12px;font-weight:700;min-height:24px"></div>
+    </div>
+  </div>
+
+  <div class="lesson-nav" style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:16px;border-top:1px solid var(--line)">
+    <div id="lessonNavText" style="color:var(--muted);font-size:14px">Пройдите все карточки, чтобы перейти дальше.</div>
+    <button id="nextLessonBtn" onclick="goToNextLesson()" disabled>Следующий урок →</button>
+  </div>
+</section>
+
+<section class="panel" id="lesson2" style="display:none">
+  <div style="color:var(--muted);font-size:13px">УРОК 2 · A1</div>
+  <h2>My world</h2>
+  <p style="color:var(--muted);line-height:1.5">Урок 2 открыт! Поздравляем с прохождением базы первого урока.</p>
+  <button onclick="backToLesson1()">← Вернуться к уроку 1</button>
+</section>
+
+</main>
+
+<footer>English School · Путь ученика</footer>
+
+<script>
+const allMemoryWords = [
+  {word:"name", transcription:"/neɪm/", translation:"имя", phrase:"My name is Anna.", target:"name"},
+  {word:"my", transcription:"/maɪ/", translation:"мой / моя", phrase:"This is my house.", target:"my"},
+  {word:"your", transcription:"/jɔːr/", translation:"твой / ваш", phrase:"What is your name?", target:"your"},
+  {word:"what", transcription:"/wɒt/", translation:"что / какой", phrase:"What is this?", target:"what"},
+  {word:"hello", transcription:"/həˈləʊ/", translation:"привет", phrase:"Hello my friend!", target:"hello"},
+  {word:"friend", transcription:"/frend/", translation:"друг", phrase:"You are my friend.", target:"friend"},
+  {word:"family", transcription:"/ˈfæm.əl.i/", translation:"семья", phrase:"I love my family.", target:"family"},
+  {word:"house", transcription:"/haʊs/", translation:"дом", phrase:"This is my house.", target:"house"},
+  {word:"school", transcription:"/skuːl/", translation:"школа", phrase:"I go to school.", target:"school"},
+  {word:"book", transcription:"/bʊk/", translation:"книга", phrase:"This is a good book.", target:"book"},
+  {word:"city", transcription:"/ˈsɪt.i/", translation:"город", phrase:"I love this city.", target:"city"},
+  {word:"cat", transcription:"/kæt/", translation:"кот / кошка", phrase:"This is my cat.", target:"cat"},
+  {word:"dog", transcription:"/dɒɡ/", translation:"собака", phrase:"I have a dog.", target:"dog"},
+  {word:"water", transcription:"/ˈwɔː.tər/", translation:"вода", phrase:"I drink water.", target:"water"},
+  {word:"food", transcription:"/fuːd/", translation:"еда", phrase:"Good food is nice.", target:"food"},
+  {word:"time", transcription:"/taɪm/", translation:"время", phrase:"What time is it?", target:"time"},
+  {word:"day", transcription:"/deɪ/", translation:"день", phrase:"Have a good day!", target:"day"},
+  {word:"night", transcription:"/naɪt/", translation:"ночь", phrase:"Good night my friend.", target:"night"},
+  {word:"good", transcription:"/ɡʊd/", translation:"хороший", phrase:"Have a good day!", target:"good"},
+  {word:"happy", transcription:"/ˈhæp.i/", translation:"счастливый", phrase:"I am very happy.", target:"happy"},
+  {word:"sun", transcription:"/sʌn/", translation:"солнце", phrase:"The sun is big.", target:"sun"},
+  {word:"work", transcription:"/wɜːk/", translation:"работа", phrase:"This is my work.", target:"work"},
+  {word:"life", transcription:"/laɪf/", translation:"жизнь", phrase:"Life is good.", target:"life"},
+  {word:"car", transcription:"/kɑːr/", translation:"машина", phrase:"This is my car.", target:"car"},
+  {word:"street", transcription:"/striːt/", translation:"улица", phrase:"I see a big street.", target:"street"},
+  {word:"paper", transcription:"/ˈpeɪ.pər/", translation:"бумага", phrase:"I have paper.", target:"paper"},
+  {word:"music", transcription:"/ˈmjuː.zɪk/", translation:"музыка", phrase:"I love music.", target:"music"},
+  {word:"apple", transcription:"/ˈæp.əl/", translation:"яблоко", phrase:"This is an apple.", target:"apple"},
+  {word:"table", transcription:"/ˈteɪ.bəl/", translation:"стол", phrase:"The book is on the table.", target:"table"},
+  {word:"chair", transcription:"/tʃeər/", translation:"стул", phrase:"This is a chair.", target:"chair"}
+];
+
+let activeLimit = 10;
+let memoryWords = [];
+let cardState = [];
+let memoryIndex = 0;
+let memoryStage = 0;
+let currentWordData = null;
+
+let currentWriteTask = null;
+let currentTeacherTask = null;
+let currentTeacherText = "";
+
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function speakText(text) {
+  if (!("speechSynthesis" in window)) {
+    alert("В вашем браузере не поддерживается воспроизведение голоса.");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-US";
+  utterance.rate = 0.85;
+  window.speechSynthesis.speak(utterance);
+}
+
+function setWordLimit(limit) {
+  activeLimit = limit;
+  document.querySelectorAll('.count-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.textContent) === limit);
+  });
+  
+  memoryWords = shuffleArray(allMemoryWords).slice(0, activeLimit);
+  initMemoryCards();
+  initQuiz();
+}
+
+function initMemoryCards() {
+  cardState = new Array(memoryWords.length).fill(false);
+  const container = document.getElementById("memoryWordLine");
+  container.innerHTML = "";
+
+  memoryWords.forEach((item, index) => {
+    const btn = document.createElement("button");
+    btn.className = "memory-word-chip";
+    btn.textContent = item.word;
+    btn.onclick = () => openMemoryCard(index);
+    container.appendChild(btn);
+  });
+
+  updateCardStatus();
+}
+
+function getLearnedWords() {
+  return memoryWords.filter((_, idx) => cardState[idx]);
+}
+
+function updateCardStatus() {
+  const done = cardState.filter(Boolean).length;
+  const countEl = document.getElementById("memoryProgressCount");
+  const msgEl = document.getElementById("memoryProgressMessage");
+  
+  if (countEl) countEl.textContent = `Пройдено: ${done} из ${memoryWords.length}`;
+  
+  if (msgEl) {
+    if (done === memoryWords.length && memoryWords.length > 0) {
+      msgEl.textContent = "Все слова выполнены! Отличная работа.";
+    } else {
+      msgEl.textContent = `Следующее слово: ${memoryWords[done]?.word || ""}.`;
+    }
+  }
+
+  const nextBtn = document.getElementById("nextLessonBtn");
+  if (nextBtn) {
+    nextBtn.disabled = done < memoryWords.length || memoryWords.length === 0;
+  }
+
+  if(done > 0) {
+    if(!currentWriteTask) generateWritingTask();
+    if(!currentTeacherTask) generateTeacherQuestion();
+  }
+
+  updatePathPage();
+}
+
+function openMemoryCard(i) {
+  if (cardState[i]) return;
+  memoryIndex = i;
+  memoryStage = 0;
+  currentWordData = memoryWords[i];
+
+  document.getElementById("cardOverlay").style.display = "flex";
+  document.querySelectorAll(".memory-word-chip").forEach((chip, idx) => {
+    chip.classList.toggle("current", idx === i);
+  });
+
+  document.getElementById("cardFront").classList.remove("hide");
+  document.getElementById("cardBack").classList.remove("show");
+  document.getElementById("cardTitle").textContent = "?";
+  document.getElementById("cardInstruction").textContent = "Введите изучаемое слово по памяти";
+  document.getElementById("cardFeedback").textContent = "";
+  
+  updateLearningStage();
+
+  const input = document.getElementById("memoryInput");
+  input.value = "";
+  input.focus();
+}
+
+function updateLearningStage() {
+  document.getElementById("stageNumber").textContent = memoryStage + 1;
+  for (let i = 0; i < 3; i++) {
+    const dot = document.getElementById("stageDot" + i);
+    if (!dot) continue;
+    dot.classList.remove("active", "done");
+    if (i < memoryStage) dot.classList.add("done");
+    if (i === memoryStage) dot.classList.add("active");
+  }
+}
+
+function closeMemoryCard() {
+  document.getElementById("cardOverlay").style.display = "none";
+  document.getElementById("memoryInput").value = "";
+}
+
+function submitMemoryAnswer() {
+  const d = memoryWords[memoryIndex];
+  const x = document.getElementById("memoryInput");
+  const f = document.getElementById("cardFeedback");
+
+  let expected = "";
+  if (memoryStage === 0) expected = d.word.toLowerCase();
+  if (memoryStage === 1) expected = d.word.charAt(0).toUpperCase() + d.word.slice(1).toLowerCase();
+  if (memoryStage === 2) expected = d.word.toUpperCase();
+
+  if (x.value.trim() !== expected) {
+    f.textContent = "Попробуйте ещё раз. Проверьте написание и регистр.";
+    f.style.color = "#c24d32";
+    x.select();
+    return;
+  }
+
+  f.textContent = "✓ Правильно";
+  f.style.color = "#19734a";
+
+  if (memoryStage < 2) {
+    memoryStage++;
+    x.value = "";
+    document.getElementById("cardInstruction").textContent =
+      memoryStage === 1 ? "Введите слово с заглавной буквы" : "Введите слово заглавными буквами";
+    updateLearningStage();
+    setTimeout(() => x.focus(), 100);
+    return;
+  }
+
+  document.getElementById("backWord").textContent = d.word;
+  document.getElementById("backTranscription").textContent = d.transcription;
+  document.getElementById("backTranslation").textContent = d.translation;
+  document.getElementById("cardFront").classList.add("hide");
+  document.getElementById("cardBack").classList.add("show");
+
+  cardState[memoryIndex] = true;
+  const chip = document.querySelectorAll(".memory-word-chip")[memoryIndex];
+  if (chip) {
+    chip.classList.remove("current");
+    chip.classList.add("done");
+  }
+  updateCardStatus();
+}
+
+function generateWritingTask() {
+  const learned = getLearnedWords();
+  if (learned.length === 0) return;
+
+  currentWriteTask = learned[Math.floor(Math.random() * learned.length)];
+  
+  const promptEl = document.getElementById("writingTaskPrompt");
+  const inputEl = document.getElementById("writeAnswer");
+  const btnEl = document.getElementById("writeBtn");
+  const audioBtn = document.getElementById("writeAudioBtn");
+
+  promptEl.innerHTML = `Напишите предложение на английском со словом: <b style="color:var(--accent)">${currentWriteTask.word}</b> (${currentWriteTask.translation})`;
+  audioBtn.style.display = "inline-block";
+  inputEl.disabled = false;
+  btnEl.disabled = false;
+  inputEl.value = "";
+  document.getElementById("writingResult").textContent = "";
+}
+
+function checkWriting() {
+  if (!currentWriteTask) return;
+  const val = document.getElementById("writeAnswer").value.trim().toLowerCase();
+  const resEl = document.getElementById("writingResult");
+  const target = currentWriteTask.word.toLowerCase();
+
+  if (val.includes(target) && val.length > target.length + 2) {
+    resEl.textContent = `✅ Отлично! Вы правильно использовали слово "${currentWriteTask.word}".`;
+    resEl.style.color = "#19734a";
+    document.getElementById("nextWriteBtn").style.display = "inline-block";
+  } else {
+    resEl.innerHTML = `Составьте предложение со словом <b>${currentWriteTask.word}</b> (пример: "${currentWriteTask.phrase}")`;
+    resEl.style.color = "#c24d32";
+  }
+}
+
+function generateTeacherQuestion() {
+  const learned = getLearnedWords();
+  if (learned.length === 0) return;
+
+  currentTeacherTask = learned[Math.floor(Math.random() * learned.length)];
+  currentTeacherText = `Please use the word ${currentTeacherTask.word} in your answer to me!`;
+
+  const teacherEl = document.getElementById("teacherQuestion");
+  const inputEl = document.getElementById("dialogAnswer");
+  const btnEl = document.getElementById("dialogBtn");
+  const audioBtn = document.getElementById("teacherAudioBtn");
+
+  teacherEl.innerHTML = `<b>Teacher:</b> Please use the word <b style="color:var(--accent)">"${currentTeacherTask.word}"</b> (${currentTeacherTask.translation}) in your answer to me!`;
+  audioBtn.style.display = "inline-block";
+  inputEl.disabled = false;
+  btnEl.disabled = false;
+  inputEl.value = "";
+  document.getElementById("dialogResult").textContent = "";
+}
+
+function checkDialogue() {
+  if (!currentTeacherTask) return;
+  const val = document.getElementById("dialogAnswer").value.trim().toLowerCase();
+  const resEl = document.getElementById("dialogResult");
+  const target = currentTeacherTask.word.toLowerCase();
+
+  if (val.includes(target)) {
+    resEl.innerHTML = `✅ <b>Teacher:</b> Excellent job! Nice usage of "${currentTeacherTask.word}".`;
+    resEl.style.color = "#19734a";
+    document.getElementById("nextDialogBtn").style.display = "inline-block";
+  } else {
+    resEl.innerHTML = `<b>Teacher:</b> Попробуйте включить в ваш ответ слово <b>${currentTeacherTask.word}</b>!`;
+    resEl.style.color = "#c24d32";
+  }
+}
+
+let quizIndex = 0;
+let quizScore = 0;
+
+function updateQuizHeader() {
+  const count = memoryWords.length;
+  const countEl = document.getElementById("quizTotalCount");
+  const declensionEl = document.getElementById("quizWordDeclension");
+  
+  if (countEl) countEl.textContent = count;
+  
+  if (declensionEl) {
+    let wordStr = "слов";
+    const lastDigit = count % 10;
+    const lastTwoDigits = count % 100;
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
+      wordStr = "слов";
+    } else if (lastDigit === 1) {
+      wordStr = "слово";
+    } else if (lastDigit >= 2 && lastDigit <= 4) {
+      wordStr = "слова";
+    }
+    declensionEl.textContent = wordStr;
+  }
+}
+
+function initQuiz() {
+  quizIndex = 0;
+  quizScore = 0;
+  updateQuizHeader();
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+  const progressEl = document.getElementById("quizProgress");
+  const scoreEl = document.getElementById("quizScore");
+  const questionEl = document.getElementById("quizQuestion");
+  const optionsEl = document.getElementById("quizOptions");
+  const feedbackEl = document.getElementById("quizFeedback");
+
+  feedbackEl.textContent = "";
+
+  if (memoryWords.length === 0) {
+    questionEl.textContent = "Выберите слова для прохождения теста.";
+    optionsEl.innerHTML = "";
+    return;
+  }
+
+  if (quizIndex >= memoryWords.length) {
+    questionEl.textContent = "🎉 Проверка завершена!";
+    optionsEl.innerHTML = "";
+    progressEl.textContent = `Завершено ${memoryWords.length} из ${memoryWords.length}`;
+    scoreEl.textContent = `Итоговый счёт: ${quizScore} / ${memoryWords.length}`;
+    return;
+  }
+
+  progressEl.textContent = `Вопрос ${quizIndex + 1} из ${memoryWords.length}`;
+  scoreEl.textContent = `Счёт: ${quizScore}`;
+
+  const currentItem = memoryWords[quizIndex];
+  questionEl.innerHTML = `Как переводится слово <b style="color:var(--accent)">${currentItem.word}</b>?`;
+
+  let wrongAnswers = memoryWords
+    .filter(item => item.word !== currentItem.word)
+    .map(item => item.translation);
+
+  let options = [currentItem.translation, ...wrongAnswers];
+  options.sort(() => 0.5 - Math.random());
+
+  optionsEl.innerHTML = "";
+  options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "quiz-btn";
+    btn.textContent = opt;
+    btn.onclick = () => handleQuizAnswer(opt, currentItem.translation);
+    optionsEl.appendChild(btn);
+  });
+}
+
+function handleQuizAnswer(selected, correct) {
+  const feedbackEl = document.getElementById("quizFeedback");
+  if (selected === correct) {
+    quizScore++;
+    feedbackEl.textContent = "✓ Верно!";
+    feedbackEl.style.color = "#19734a";
+  } else {
+    feedbackEl.textContent = `✕ Неверно. Правильный ответ: ${correct}`;
+    feedbackEl.style.color = "#c24d32";
+  }
+
+  setTimeout(() => {
+    quizIndex++;
+    renderQuizQuestion();
+  }, 1200);
+}
+
+function openDictionaryModal() {
+  const grid = document.getElementById("dictGrid");
+  grid.innerHTML = "";
+  
+  allMemoryWords.forEach((item, idx) => {
+    const label = document.createElement("label");
+    label.className = "dict-item";
+    const isChecked = memoryWords.some(w => w.word === item.word);
+    label.innerHTML = `
+      <input type="checkbox" value="${idx}" ${isChecked ? 'checked' : ''} onchange="updateDictCounter()">
+      <b>${item.word}</b> — ${item.translation}
+    `;
+    grid.appendChild(label);
+  });
+
+  updateDictCounter();
+  document.getElementById("dictOverlay").style.display = "flex";
+}
+
+function closeDictionaryModal() {
+  document.getElementById("dictOverlay").style.display = "none";
+}
+
+function updateDictCounter() {
+  const checked = document.querySelectorAll('#dictGrid input[type="checkbox"]:checked');
+  document.getElementById("selectedDictCount").textContent = checked.length;
+}
+
+function autoSelectDict(count) {
+  const checkboxes = document.querySelectorAll('#dictGrid input[type="checkbox"]');
+  checkboxes.forEach(cb => cb.checked = false);
+  
+  const shuffled = Array.from(checkboxes).sort(() => 0.5 - Math.random()).slice(0, count);
+  shuffled.forEach(cb => cb.checked = true);
+  updateDictCounter();
+}
+
+function applyCustomDictionary() {
+  const checked = document.querySelectorAll('#dictGrid input[type="checkbox"]:checked');
+  if (checked.length === 0) {
+    alert("Выберите хотя бы одно слово!");
+    return;
+  }
+  
+  const selectedWords = Array.from(checked).map(cb => allMemoryWords[parseInt(cb.value)]);
+  memoryWords = shuffleArray(selectedWords);
+  activeLimit = memoryWords.length;
+  
+  document.querySelectorAll('.count-btn').forEach(btn => btn.classList.remove('active'));
+  closeDictionaryModal();
+  initMemoryCards();
+  initQuiz();
+}
+
+function goToNextLesson(){
+  if(cardState.filter(Boolean).length < memoryWords.length) return;
+  document.getElementById("lesson").style.display = "none";
+  document.getElementById("lesson2").style.display = "block";
+}
+
+function backToLesson1(){
+  document.getElementById("lesson2").style.display = "none";
+  document.getElementById("lesson").style.display = "block";
+}
+
+function updatePathPage(){
+  const done = cardState.filter(Boolean).length;
+  const p1 = document.getElementById("path1");
+  const p2 = document.getElementById("path2");
+  if(!p1 || !p2) return;
+  
+  if(done >= memoryWords.length && memoryWords.length > 0){
+    p1.classList.remove("active");
+    p1.classList.add("done");
+    p2.classList.add("active");
+  } else {
+    p1.classList.add("active");
+    p2.classList.remove("active","done");
+  }
+}
+
+setWordLimit(10);
+</script>
+</body>
+</html>

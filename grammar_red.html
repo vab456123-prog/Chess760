@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Essential Grammar in Use — Красный Мерфи (A1–A2)</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#68738a;--line:#e3e8f1;--red:#c2293e;--red-light:#fdeef0;--accent:#3b5ccc}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(135deg,#fff8f8,#f5f7fb);color:var(--text)}
+header{padding:20px 6%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);background:#fff}
+.back-link{text-decoration:none;color:var(--muted);font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px}
+.back-link:hover{color:var(--red)}
+.logo{font-size:20px;font-weight:800;color:var(--red)}
+
+main{max-width:1100px;margin:auto;padding:24px 22px 60px}
+.hero-title{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.badge-red{background:var(--red-light);color:var(--red);padding:6px 14px;border-radius:999px;font-weight:700;font-size:13px}
+
+.grammar-container{display:grid;grid-template-columns:320px 1fr;gap:24px}
+@media(max-width:850px){.grammar-container{grid-template-columns:1fr}}
+
+/* Список юнитов */
+.units-sidebar{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;height:fit-content}
+.units-sidebar h3{margin:0 0 14px 8px;font-size:16px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+.unit-item{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:12px;cursor:pointer;margin-bottom:6px;transition:0.18s;border:1px solid transparent}
+.unit-item:hover{background:#f8f9fc}
+.unit-item.active{background:var(--red-light);border-color:rgba(194,41,62,0.2);color:var(--red);font-weight:700}
+.unit-num{font-size:13px;opacity:0.8}
+.unit-title{font-size:14px;flex-grow:1;margin-left:8px}
+
+/* Работа с материалом */
+.content-area{background:#fff;border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,0.03)}
+.unit-header{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:24px}
+.unit-header h1{margin:6px 0;font-size:26px;color:var(--text)}
+
+/* Переключатель Теория / Практика */
+.tabs{display:flex;gap:10px;margin-bottom:24px}
+.tab-btn{padding:10px 20px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:700;cursor:pointer;font-size:14px;transition:0.2s}
+.tab-btn.active{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* Экран теории */
+.theory-box{background:#fafbfc;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:20px}
+.theory-box h4{margin:0 0 10px;font-size:16px;color:var(--red)}
+.example-list{list-style:none;padding:0;margin:12px 0 0}
+.example-list li{padding:8px 12px;background:#fff;border-radius:8px;border:1px solid var(--line);margin-bottom:8px;font-size:15px}
+.example-list li strong{color:var(--red)}
+
+/* Экран практики */
+.exercise-card{background:#fbfcff;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px}
+.exercise-q{font-size:16px;font-weight:700;margin-bottom:14px}
+.options{display:grid;gap:8px}
+.opt-btn{text-align:left;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:15px;cursor:pointer;transition:0.15s}
+.opt-btn:hover{background:#f0f4ff;border-color:#b8c9ee}
+.opt-btn.correct{background:#e8f7ee;border-color:#52b774;color:#1e6936;font-weight:700}
+.opt-btn.wrong{background:#fdeef0;border-color:#e06877;color:#9e1b2d}
+
+.feedback{margin-top:12px;font-weight:600;font-size:14px}
+.feedback.correct{color:#1e6936}
+.feedback.wrong{color:#9e1b2d}
+
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="english_school.html" class="back-link">← На главную</a>
+  <div class="logo">Essential Grammar in Use</div>
+  <span class="badge-red">Красный Мерфи</span>
+</header>
+
+<main>
+  <div class="hero-title">
+    <h2>Грамматический справочник и тренажер</h2>
+  </div>
+
+  <div class="grammar-container">
+    <!-- Боковая панель со списком юнитов -->
+    <aside class="units-sidebar">
+      <h3>Разделы (Units)</h3>
+      <div class="unit-item active" onclick="loadUnit(1)">
+        <span class="unit-num">Unit 1</span>
+        <span class="unit-title">am/is/are (Present Simple)</span>
+      </div>
+      <div class="unit-item" onclick="loadUnit(2)">
+        <span class="unit-num">Unit 2</span>
+        <span class="unit-title">am/is/are (Questions)</span>
+      </div>
+      <div class="unit-item" onclick="loadUnit(3)">
+        <span class="unit-num">Unit 3</span>
+        <span class="unit-title">I am doing (Present Continuous)</span>
+      </div>
+      <div class="unit-item" onclick="loadUnit(4)">
+        <span class="unit-num">Unit 4</span>
+        <span class="unit-title">Are you doing? (Continuous Q)</span>
+      </div>
+      <div class="unit-item" onclick="loadUnit(5)">
+        <span class="unit-num">Unit 5</span>
+        <span class="unit-title">I do / work / like (Present Simple)</span>
+      </div>
+    </aside>
+
+    <!-- Главная рабочая область -->
+    <section class="content-area">
+      <div class="unit-header">
+        <span class="badge-red" id="unitBadge">Unit 1</span>
+        <h1 id="unitTitle">am / is / are</h1>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" id="btnTheory" onclick="switchTab('theory')">📖 Теория</button>
+        <button class="tab-btn" id="btnPractice" onclick="switchTab('practice')">✍️ Практика</button>
+      </div>
+
+      <!-- Вкладка ТЕОРИЯ -->
+      <div id="tabTheory">
+        <div class="theory-box">
+          <h4>Формы глагола to be:</h4>
+          <p>Глагол <strong>to be</strong> меняется в зависимости от того, кто совершает действие:</p>
+          <ul class="example-list">
+            <li><strong>I am</strong> (I'm) → I <strong>am</strong> a student.</li>
+            <li><strong>He / She / It is</strong> (he's / she's) → She <strong>is</strong> happy.</li>
+            <li><strong>We / You / They are</strong> (we're / they're) → They <strong>are</strong> at home.</li>
+          </ul>
+        </div>
+
+        <div class="theory-box">
+          <h4>Отрицание (Negative):</h4>
+          <p>Добавляем частицу <strong>not</strong> после am/is/are:</p>
+          <ul class="example-list">
+            <li>I <strong>am not</strong> (I'm not) hungry.</li>
+            <li>He <strong>is not</strong> (he isn't / he's not) Italian.</li>
+            <li>We <strong>are not</strong> (we aren't / we're not) late.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Вкладка ПРАКТИКА -->
+      <div id="tabPractice" class="hidden">
+        <div id="exerciseContainer">
+          <!-- Задания подгружаются через JS -->
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+// Данные юнитов
+const unitsData = {
+  1: {
+    title: "am / is / are (Present Simple)",
+    theoryHtml: `
+      <div class="theory-box">
+        <h4>Формы глагола to be:</h4>
+        <p>Глагол <strong>to be</strong> меняется в зависимости от подлежащего:</p>
+        <ul class="example-list">
+          <li><strong>I am</strong> → I <strong>am</strong> 22 years old.</li>
+          <li><strong>He / She / It is</strong> → My sister <strong>is</strong> a doctor.</li>
+          <li><strong>We / You / They are</strong> → You <strong>are</strong> right.</li>
+        </ul>
+      </div>
+    `,
+    exercises: [
+      {
+        q: "1. She ___ a very good teacher.",
+        options: ["am", "is", "are"],
+        correct: 1
+      },
+      {
+        q: "2. My shoes ___ clean.",
+        options: ["am", "is", "are"],
+        correct: 2
+      },
+      {
+        q: "3. I ___ not tired today.",
+        options: ["am", "is", "are"],
+        correct: 0
+      }
+    ]
+  },
+  2: {
+    title: "am / is / are (Questions)",
+    theoryHtml: `
+      <div class="theory-box">
+        <h4>Вопросы с глаголом to be:</h4>
+        <p>Для создания вопроса ставим <strong>Am / Is / Are</strong> в начало предложения перед подлежащим:</p>
+        <ul class="example-list">
+          <li><strong>Is</strong> your mother at home?</li>
+          <li><strong>Are</strong> your parents well?</li>
+          <li><strong>Where is</strong> the bus stop?</li>
+        </ul>
+      </div>
+    `,
+    exercises: [
+      {
+        q: "1. ___ your name John?",
+        options: ["Am", "Is", "Are"],
+        correct: 1
+      },
+      {
+        q: "2. Where ___ you from?",
+        options: ["am", "is", "are"],
+        correct: 2
+      }
+    ]
+  }
+};
+
+let currentUnit = 1;
+
+function switchTab(tab) {
+  document.getElementById('btnTheory').classList.toggle('active', tab === 'theory');
+  document.getElementById('btnPractice').classList.toggle('active', tab === 'practice');
+  document.getElementById('tabTheory').classList.toggle('hidden', tab !== 'theory');
+  document.getElementById('tabPractice').classList.toggle('hidden', tab !== 'practice');
+}
+
+function loadUnit(unitId) {
+  currentUnit = unitId;
+  const data = unitsData[unitId] || unitsData[1];
+
+  document.getElementById('unitBadge').innerText = `Unit ${unitId}`;
+  document.getElementById('unitTitle').innerText = data.title;
+  document.getElementById('tabTheory').innerHTML = data.theoryHtml;
+
+  // Обновление активного элемента в меню
+  document.querySelectorAll('.unit-item').forEach((el, index) => {
+    el.classList.toggle('active', (index + 1) === unitId);
+  });
+
+  // Загрузка упражнений
+  renderExercises(data.exercises);
+  
+  // По умолчанию открываем теорию
+  switchTab('theory');
+}
+
+function renderExercises(exercises) {
+  const container = document.getElementById('exerciseContainer');
+  if (!exercises || exercises.length === 0) {
+    container.innerHTML = '<p>Задания для этого юнита скоро будут добавлены.</p>';
+    return;
+  }
+
+  container.innerHTML = exercises.map((ex, exIdx) => `
+    <div class="exercise-card">
+      <div class="exercise-q">${ex.q}</div>
+      <div class="options">
+        ${ex.options.map((opt, optIdx) => `
+          <button class="opt-btn" onclick="checkAnswer(${exIdx},${optIdx}, ${ex.correct}, this)">${opt}</button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${exIdx}"></div>
+    </div>
+  `).join('');
+}
+
+function checkAnswer(exIdx, selected, correct, btn) {
+  const parent = btn.parentElement;
+  const buttons = parent.querySelectorAll('.opt-btn');
+  const fb = document.getElementById(`fb-${exIdx}`);
+
+  buttons.forEach(b => b.classList.remove('correct', 'wrong'));
+
+  if (selected === correct) {
+    btn.classList.add('correct');
+    fb.innerText = "✨ Верно!";
+    fb.className = "feedback correct";
+  } else {
+    btn.classList.add('wrong');
+    buttons[correct].classList.add('correct');
+    fb.innerText = "❌ Неверно, попробуйте еще раз!";
+    fb.className = "feedback wrong";
+  }
+}
+
+// Старт с 1-го юнита
+loadUnit(1);
+</script>
+
+</body>
+</html>
